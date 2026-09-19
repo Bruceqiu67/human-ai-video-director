@@ -1,0 +1,153 @@
+# ==============================================================================
+# 🎬 AI 视频制作工业化分镜剧本模板 (Universal 5-Act Storyboard Specification)
+# ==============================================================================
+# 本文件为短视频项目的【单一真理源 (Single Source of Truth)】。
+# 负责统领全片的分幕结构、对白台词、时间轴气口、出镜姿态与视觉动效。
+# ==============================================================================
+
+project:
+  name: "my_product_video"
+  title: "我的高品质产品宣传片"
+  resolution: [1080, 1920]          # 竖版高清短视频 (9:16)
+  fps: 30                          # 标准帧率 (30fps)
+  style_preset: "journal_scrapbook" # 风格预设: journal_scrapbook(手账杂志风) | modern_tech(科技SaaS风)
+  
+  audio:
+    voice: "zh-CN-YunxiNeural"      # 推荐微软官方音色:
+                                    # - zh-CN-YunxiNeural: 阳光青年男声，适合产品官宣与实操讲解
+                                    # - zh-CN-YunjianNeural: 沉稳专家男声，情绪张力强
+                                    # - zh-CN-XiaoxiaoNeural: 温暖亲和女声
+    rate: "+20%"                    # 恒定自然语速 (严禁逐句 atempo 变速)
+    bgm_volume_active: 0.12         # 人声讲话时 BGM 压低音量 (Sidechain Ducking)
+    bgm_volume_idle: 0.25           # 人声停顿气口时 BGM 回弹音量
+    bgm_file: ""                    # 可留空自动扫描 assets/bgm 目录，或指定路径
+
+# ==============================================================================
+# 黄金 5 幕标准分镜配置 (总时长建议控制在 50s ~ 65s 完播区间)
+# ==============================================================================
+scenes:
+  # ----------------------------------------------------------------------------
+  # Act 1: 痛点觉醒 (Hook) —— 突发冲突、共情暴击、打破平衡 (10~12s)
+  # ----------------------------------------------------------------------------
+  - id: "scene_01"
+    stage_tag: "STAGE 01 // 痛点觉醒"
+    headline: "每天加班，都在重复造轮子？"
+    transition:
+      type: "none"                  # 第一幕直接进入
+    dialogue_segments:
+      - id: "s1_1"
+        text: "刚开口，就被客户秒挂电话！"
+        pose: "Pose1_手持电话发愁"
+        fx: ["warning_badge_shake"]
+      - id: "s1_2"
+        text: "面对突发异议，大脑一片空白不知所措，"
+        pose: "Pose2_看手机抓狂"
+        fx: []
+      - id: "s1_3"
+        text: "新人缺乏实战经验，再好的线索也只能白白流失！"
+        pose: "Pose3_揉眉心叹气"
+        fx: ["camera_push"]
+    timing:
+      initial_delay: 0.30           # 片头呼吸气口
+      pause_between: 0.28           # 句间自然停顿
+      tail_pad: 0.50                # 幕尾留白
+
+  # ----------------------------------------------------------------------------
+  # Act 2: 破局重塑 (Solution) —— 心理减负、引入主角、全景地图 (12~14s)
+  # ----------------------------------------------------------------------------
+  - id: "scene_02"
+    stage_tag: "STAGE 02 // 破局重塑"
+    headline: "别担心，只是你练少了！"
+    transition:
+      type: "page_flip"             # 2.5D 物理卷边翻书转场
+      duration: 0.65
+    dialogue_segments:
+      - id: "s2_1"
+        text: "找不到人随时陪练、怕拿客户试错？"
+        pose: "Pose1_手托引导"
+        fx: []
+      - id: "s2_2"
+        text: "全新 AI 智能体，把顶级高手的通关经验做成了实战对战地图！"
+        pose: "Pose2_食指点划"
+        fx: ["highlighter_sweep"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  # ----------------------------------------------------------------------------
+  # Act 3: 拟真对战 (Simulation) —— 极客对决、深度体验、零险排雷 (12~14s)
+  # ----------------------------------------------------------------------------
+  - id: "scene_03"
+    stage_tag: "STAGE 03 // 拟真对战"
+    headline: "高难度客户，真刀真枪硬核对攻"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s3_1"
+        text: "从‘现在忙’到‘再考虑’，24个刁钻场景随意挑战。"
+        pose: "Pose1_点击开始"
+        fx: ["click_pulse"]
+      - id: "s3_2"
+        text: "AI 实时语音模拟真实客户高压反问，"
+        pose: "Pose2_面对挑战"
+        fx: ["waveform_equalizer"]
+      - id: "s3_3"
+        text: "在零风险的安全屋里，帮你把所有雷区通通排空！"
+        pose: "Pose3_自信抱胸"
+        fx: ["stamp_impact"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  # ----------------------------------------------------------------------------
+  # Act 4: 深度诊断 (Insight) —— 残暴打分、颠覆认知、干货解法 (14~17s)
+  # ----------------------------------------------------------------------------
+  - id: "scene_04"
+    stage_tag: "STAGE 04 // 深度诊断"
+    headline: "练完立刻体检，哪里卡壳看哪里"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s4_1"
+        text: "刚开始练只有45分？"
+        pose: "Pose1_耸肩错愕"
+        fx: ["score_stamp_impact"]
+      - id: "s4_2"
+        text: "AI 逐句拆解情感共鸣与利益点前置，告诉你哪句话没锁住客户注意力。"
+        pose: "Pose2_托腮思考"
+        fx: []
+      - id: "s4_3"
+        text: "针对卡壳痛点一键重练，直到形成肌肉记忆！"
+        pose: "Pose3_OK自信"
+        fx: ["highlighter_sweep"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  # ----------------------------------------------------------------------------
+  # Act 5: 通关号召 (CTA) —— 终极爽感、能力升华、立即行动 (9~11s)
+  # ----------------------------------------------------------------------------
+  - id: "scene_05"
+    stage_tag: "STAGE 05 // 通关号召"
+    headline: "打开 APP，开启你的销冠通关之旅"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s5_1"
+        text: "告别慌乱，把每一次对练都变成上战场前的胸有成竹。"
+        pose: "Pose1_握拳蓄力"
+        fx: []
+      - id: "s5_2"
+        text: "立即登录好帮手，开启你的 AI 专属私教！"
+        pose: "Pose2_点赞通关"
+        fx: ["gold_light_sweep"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.30
+      tail_pad: 0.80

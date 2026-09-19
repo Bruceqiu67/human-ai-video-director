@@ -1,0 +1,221 @@
+{
+  "$schema": "https://agentskills.io/schemas/preset-profiles/v1",
+  "skill": "ffmpeg-video-editor",
+  "version": "1.0.0",
+  "profiles": {
+    "web-optimized": {
+      "description": "H.264 optimized for browser streaming and web delivery",
+      "use_case": "YouTube, Vimeo, web players, general distribution",
+      "video": {
+        "codec": "libx264",
+        "crf": 23,
+        "preset": "slow",
+        "profile": "high",
+        "level": "4.0",
+        "pix_fmt": "yuv420p",
+        "movflags": "+faststart"
+      },
+      "audio": {
+        "codec": "aac",
+        "bitrate": "128k",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "container": "mp4",
+      "ffmpeg_args": [
+        "-c:v", "libx264",
+        "-crf", "23",
+        "-preset", "slow",
+        "-profile:v", "high",
+        "-level", "4.0",
+        "-pix_fmt", "yuv420p",
+        "-c:a", "aac",
+        "-b:a", "128k",
+        "-ar", "44100",
+        "-movflags", "+faststart"
+      ],
+      "example": "ffmpeg -i input.mp4 -c:v libx264 -crf 23 -preset slow -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart output.mp4"
+    },
+
+    "high-quality": {
+      "description": "High-quality H.264 for archive masters and pristine delivery",
+      "use_case": "Client deliverables, archiving, source for future transcodes",
+      "video": {
+        "codec": "libx264",
+        "crf": 18,
+        "preset": "veryslow",
+        "profile": "high",
+        "level": "4.2",
+        "pix_fmt": "yuv420p",
+        "movflags": "+faststart"
+      },
+      "audio": {
+        "codec": "aac",
+        "bitrate": "192k",
+        "sample_rate": 48000,
+        "channels": 2
+      },
+      "container": "mp4",
+      "ffmpeg_args": [
+        "-c:v", "libx264",
+        "-crf", "18",
+        "-preset", "veryslow",
+        "-profile:v", "high",
+        "-level", "4.2",
+        "-pix_fmt", "yuv420p",
+        "-c:a", "aac",
+        "-b:a", "192k",
+        "-ar", "48000",
+        "-movflags", "+faststart"
+      ],
+      "example": "ffmpeg -i input.mp4 -c:v libx264 -crf 18 -preset veryslow -profile:v high -level 4.2 -pix_fmt yuv420p -c:a aac -b:a 192k -ar 48000 -movflags +faststart output.mp4"
+    },
+
+    "social-media-vertical": {
+      "description": "9:16 portrait video for TikTok, Instagram Reels, YouTube Shorts",
+      "use_case": "TikTok, Instagram Reels, YouTube Shorts, Stories",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920,
+        "aspect_ratio": "9:16",
+        "scale_filter": "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black"
+      },
+      "video": {
+        "codec": "libx264",
+        "crf": 23,
+        "preset": "slow",
+        "profile": "high",
+        "level": "4.0",
+        "pix_fmt": "yuv420p",
+        "max_bitrate": "6M",
+        "movflags": "+faststart"
+      },
+      "audio": {
+        "codec": "aac",
+        "bitrate": "128k",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "container": "mp4",
+      "notes": [
+        "Max file size: 287.6 MB for TikTok, 4 GB for Instagram",
+        "Max duration: 60s TikTok (short), 3 min TikTok (long), 90s Reels",
+        "Recommended frame rate: 30 or 60fps"
+      ],
+      "example": "ffmpeg -i input.mp4 -vf \"scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black\" -c:v libx264 -crf 23 -preset slow -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart output.mp4"
+    },
+
+    "social-media-square": {
+      "description": "1:1 square video for Instagram Feed and Facebook",
+      "use_case": "Instagram feed posts, Facebook video, LinkedIn",
+      "dimensions": {
+        "width": 1080,
+        "height": 1080,
+        "aspect_ratio": "1:1",
+        "scale_filter": "scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2:black"
+      },
+      "video": {
+        "codec": "libx264",
+        "crf": 23,
+        "preset": "slow",
+        "profile": "high",
+        "level": "4.0",
+        "pix_fmt": "yuv420p",
+        "max_bitrate": "3.5M",
+        "movflags": "+faststart"
+      },
+      "audio": {
+        "codec": "aac",
+        "bitrate": "128k",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "container": "mp4",
+      "notes": [
+        "Instagram: max 4 GB, max 60s for feed video",
+        "Facebook: max 10 GB, max 240 min"
+      ],
+      "example": "ffmpeg -i input.mp4 -vf \"scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2:black\" -c:v libx264 -crf 23 -preset slow -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart output.mp4"
+    },
+
+    "fast-preview": {
+      "description": "Fast, low-quality proxy for review and editing preview",
+      "use_case": "Client review links, editing proxy, quick previews",
+      "video": {
+        "codec": "libx264",
+        "crf": 28,
+        "preset": "ultrafast",
+        "profile": "baseline",
+        "level": "3.0",
+        "pix_fmt": "yuv420p",
+        "scale": "1280:-2",
+        "movflags": "+faststart"
+      },
+      "audio": {
+        "codec": "aac",
+        "bitrate": "96k",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "container": "mp4",
+      "notes": [
+        "Encodes 5–10× faster than real-time on modern hardware",
+        "Not suitable for final delivery — use for review only"
+      ],
+      "example": "ffmpeg -i input.mp4 -vf \"scale=1280:-2\" -c:v libx264 -crf 28 -preset ultrafast -profile:v baseline -level 3.0 -pix_fmt yuv420p -c:a aac -b:a 96k -movflags +faststart preview.mp4"
+    },
+
+    "lossless-intermediate": {
+      "description": "Lossless FFV1 for post-production intermediate and archiving",
+      "use_case": "Intermediate between editing stages, long-term preservation",
+      "video": {
+        "codec": "ffv1",
+        "level": 3,
+        "threads": 8,
+        "coder": 1,
+        "context": 1,
+        "gop": 1,
+        "slicecrc": 1
+      },
+      "audio": {
+        "codec": "flac",
+        "compression_level": 8
+      },
+      "container": "mkv",
+      "notes": [
+        "Lossless — no quality loss across multiple encode/decode cycles",
+        "Large file size (~1–3 GB per minute at 1080p)",
+        "FFV1 level 3 supports multithreading and error detection",
+        "Suitable for OAIS/NDSA preservation standards"
+      ],
+      "example": "ffmpeg -i input.mp4 -c:v ffv1 -level 3 -threads 8 -coder 1 -context 1 -g 1 -slicecrc 1 -c:a flac output.mkv"
+    }
+  },
+
+  "audio_normalization": {
+    "ebu_r128_broadcast": {
+      "description": "EBU R128 standard for broadcast",
+      "integrated_loudness": -23,
+      "true_peak": -1.0,
+      "loudness_range": 18
+    },
+    "ebu_r128_streaming": {
+      "description": "EBU R128 for online streaming platforms",
+      "integrated_loudness": -16,
+      "true_peak": -1.5,
+      "loudness_range": 11
+    },
+    "youtube": {
+      "description": "YouTube target (normalizes to -14 LUFS after upload)",
+      "integrated_loudness": -14,
+      "true_peak": -1.0,
+      "loudness_range": 11
+    },
+    "apple_podcasts": {
+      "description": "Apple Podcasts loudness standard",
+      "integrated_loudness": -16,
+      "true_peak": -1.0,
+      "loudness_range": 11
+    }
+  }
+}

@@ -1,0 +1,54 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual environments & packages
+.venv/
+venv/
+ENV/
+env/
+node_modules/
+dist/
+build/
+*.egg-info/
+
+# Media & Heavy Files (Strictly excluded to avoid leaking private business assets)
+*.mp4
+*.wav
+*.mp3
+*.aac
+*.m4a
+*.flac
+*.mov
+*.avi
+*.mkv
+
+# Project internal assets & rendering output
+素材/
+output/
+qa_frames/
+raw_segments/
+temp/
+*.log
+
+# Existing project scratch / private working directories
+projects/
+archive/
+
+# Keep template and example gitkeeps and configs
+!templates/**/.gitkeep
+!templates/**/storyboard.yaml
+!templates/**/README.md
+!examples/**/storyboard.yaml
+!examples/**/MASTER_PROMPTS.md
+!examples/**/README.md
+!video_tools_ecosystem/**/.gitkeep
+!video_tools_ecosystem/**/README.md
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

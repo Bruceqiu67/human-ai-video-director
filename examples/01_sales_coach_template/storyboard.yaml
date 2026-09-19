@@ -1,0 +1,131 @@
+# ==============================================================================
+# 案例一：《好帮手AI话术私教》商业宣传片分镜剧本 (纯净文本模板)
+# ==============================================================================
+
+project:
+  name: "haobangshou_sales_coach"
+  title: "好帮手AI学习助手 · 话术私教"
+  resolution: [1080, 1920]
+  fps: 30
+  style_preset: "journal_scrapbook"
+  audio:
+    voice: "zh-CN-YunxiNeural"
+    rate: "+20%"
+    bgm_volume_active: 0.12
+    bgm_volume_idle: 0.25
+
+scenes:
+  - id: "scene_01"
+    stage_tag: "STAGE 01 // 痛点觉醒"
+    headline: "刚开口，就被客户秒挂？"
+    transition:
+      type: "none"
+    dialogue_segments:
+      - id: "s1_1"
+        text: "刚开口，就被客户秒挂！"
+        pose: "Pose1_通话"
+        fx: ["warning_badge_shake"]
+      - id: "s1_2"
+        text: "面对客户的‘现在忙’，大脑一片空白不知如何回复。"
+        pose: "Pose2_看手机"
+        fx: []
+      - id: "s1_3"
+        text: "新人缺乏异议经验，根本留不住客户！"
+        pose: "Pose3_抓头发愁"
+        fx: ["camera_push"]
+    timing:
+      initial_delay: 0.30
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  - id: "scene_02"
+    stage_tag: "STAGE 02 // 破局重构"
+    headline: "别担心，只是你练少了！"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s2_1"
+        text: "找不到人随时陪练、怕拿客户试错？"
+        pose: "Pose1_困局发愁"
+        fx: []
+      - id: "s2_2"
+        text: "好帮手AI学习助手重磅上线——话术私教！"
+        pose: "Pose2_食指点划"
+        fx: ["highlighter_sweep"]
+      - id: "s2_3"
+        text: "拆解销冠实战经验，覆盖车险24个高频异议场景。"
+        pose: "Pose3_通关握拳"
+        fx: []
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  - id: "scene_03"
+    stage_tag: "STAGE 03 // 拟真对攻"
+    headline: "拟真对攻，零风险高压排雷"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s3_1"
+        text: "高难度客户、真刀真枪硬核对战。"
+        pose: "Pose1_平指挑战"
+        fx: ["click_pulse"]
+      - id: "s3_2"
+        text: "AI 实时语音模拟真实客户高压反问。"
+        pose: "Pose2_扶眼镜吃惊"
+        fx: ["waveform_equalizer"]
+      - id: "s3_3"
+        text: "零风险通关演练，帮你把所有雷区通通排空！"
+        pose: "Pose3_抱胸自信"
+        fx: ["stamp_impact"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  - id: "scene_04"
+    stage_tag: "STAGE 04 // 深度诊断"
+    headline: "第一次练只有45分？"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s4_1"
+        text: "第一次练只有45分？"
+        pose: "Pose1_耸肩错愕"
+        fx: ["score_stamp_impact"]
+      - id: "s4_2"
+        text: "AI 深度体检单逐句剖析情感共鸣与利益点前置。"
+        pose: "Pose2_托腮思考"
+        fx: []
+      - id: "s4_3"
+        text: "90%同到期车主已办理，专属免费道路救援直接锁定客户心智！"
+        pose: "Pose3_OK自信"
+        fx: ["highlighter_sweep"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  - id: "scene_05"
+    stage_tag: "STAGE 05 // 通关升华"
+    headline: "打开好帮手，开启销冠之旅"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s5_1"
+        text: "哪里卡壳，就一键再练一次，直到形成肌肉记忆！"
+        pose: "Pose1_握拳蓄力"
+        fx: []
+      - id: "s5_2"
+        text: "立即登录好帮手，开启你的销冠通关之旅！"
+        pose: "Pose2_点赞通关"
+        fx: ["gold_light_sweep"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.30
+      tail_pad: 0.80

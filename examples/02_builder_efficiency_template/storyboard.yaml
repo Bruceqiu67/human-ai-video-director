@@ -1,0 +1,127 @@
+# ==============================================================================
+# 案例二：《用 Builder 提高办公效率》SaaS 工具宣传片分镜剧本 (纯净模板)
+# ==============================================================================
+
+project:
+  name: "builder_efficiency"
+  title: "用 Builder 打造 7x24 小时 AI 办公外挂"
+  resolution: [1080, 1920]
+  fps: 30
+  style_preset: "journal_scrapbook"
+  audio:
+    voice: "zh-CN-YunjianNeural"
+    rate: "+20%"
+    bgm_volume_active: 0.12
+    bgm_volume_idle: 0.25
+
+scenes:
+  - id: "scene_01"
+    stage_tag: "STAGE 01 // 机械内耗"
+    headline: "每天3小时，都在干苦力？"
+    transition:
+      type: "none"
+    dialogue_segments:
+      - id: "s1_1"
+        text: "每天上班两小时在搬砖，三小时在催数据？"
+        pose: "Pose1_敲键盘抓狂"
+        fx: ["warning_badge_shake"]
+      - id: "s1_2"
+        text: "重复写周报、逐条核对发票、跨系统复制粘贴，"
+        pose: "Pose2_扶额叹气"
+        fx: []
+      - id: "s1_3"
+        text: "你的时间正在被毫无价值的琐事疯狂吞噬！"
+        pose: "Pose3_瘫坐在椅"
+        fx: ["camera_push"]
+    timing:
+      initial_delay: 0.25
+      pause_between: 0.25
+      tail_pad: 0.50
+
+  - id: "scene_02"
+    stage_tag: "STAGE 02 // 认知跃迁"
+    headline: "告别人肉外包，搭建 AI 外挂"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s2_1"
+        text: "别再当人肉打字机了！真正的高手，早就用 Builder 给自己配了一个 7x24 小时的 AI 自动化外挂。"
+        pose: "Pose1_推眼镜自信"
+        fx: []
+      - id: "s2_2"
+        text: "不用写一行代码，像搭积木一样，把你的业务经验沉淀为专属智能体！"
+        pose: "Pose2_开掌展示"
+        fx: ["highlighter_sweep"]
+    timing:
+      initial_delay: 0.40
+      pause_between: 0.30
+      tail_pad: 0.50
+
+  - id: "scene_03"
+    stage_tag: "STAGE 03 // 流程实战"
+    headline: "发票与表格：10秒全自动流转"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s3_1"
+        text: "比如发票报销和数据汇总："
+        pose: "Pose1_点击运行"
+        fx: ["click_pulse"]
+      - id: "s3_2"
+        text: "只需拖入文件读取节点，挂载大模型智能提取，自动清洗格式并回填表格。"
+        pose: "Pose2_流程连线"
+        fx: []
+      - id: "s3_3"
+        text: "过去整整一下午的手工录入，现在点击运行，10秒内精准搞定！"
+        pose: "Pose3_抱胸满意"
+        fx: ["stamp_impact"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  - id: "scene_04"
+    stage_tag: "STAGE 04 // 黄金公式"
+    headline: "变身超级个体的 3 步黄金心法"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s4_1"
+        text: "想要搭出高效率工作流，记住这三步黄金公式："
+        pose: "Pose1_手托三步卡片"
+        fx: []
+      - id: "s4_2"
+        text: "第一，重复步骤‘节点化’；第二，业务判断‘规则化’；第三，最终输出‘标准化’。"
+        pose: "Pose2_指点核心"
+        fx: ["highlighter_sweep"]
+      - id: "s4_3"
+        text: "从此你不再是一个人在干活，而是在调度一个智能军团！"
+        pose: "Pose3_自信微笑"
+        fx: []
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.28
+      tail_pad: 0.50
+
+  - id: "scene_05"
+    stage_tag: "STAGE 05 // 立即行动"
+    headline: "把重复劳动交给 Builder，今天就动手！"
+    transition:
+      type: "page_flip"
+      duration: 0.65
+    dialogue_segments:
+      - id: "s5_1"
+        text: "把重复劳动交给 Builder，把核心精力留给思考与创造。"
+        pose: "Pose1_握拳号召"
+        fx: []
+      - id: "s5_2"
+        text: "今天就动手，在你的工作流里搭建第一个 AI 助手，开启属于你的超级个体时代！"
+        pose: "Pose2_点赞通关"
+        fx: ["gold_light_sweep"]
+    timing:
+      initial_delay: 0.35
+      pause_between: 0.30
+      tail_pad: 0.80

@@ -1,0 +1,4 @@
+interface:
+  display_name: "yh.tools · video2srt"
+  short_description: "复用或提取音频，按语义断句生成绝不硬切的精确中文 SRT"
+  default_prompt: "使用 $yh-tools-video2srt 从指定视频或现有音频按语义自然断句，生成无硬切、无孤立标点且时间戳精确的中文 SRT。"
