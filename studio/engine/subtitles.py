@@ -52,15 +52,28 @@ class AdaptiveCapsuleSubtitle:
         
         # Calculate width & auto-scale down if exceeding max_width
         text_w = sum(font.getlength(c) for c in text)
-        while text_w > self.max_width and target_size > 22:
+        while text_w > self.max_width and target_size > 24:
             target_size -= 2
             font = self._get_font(target_size)
             text_w = sum(font.getlength(c) for c in text)
             
+        lines = [text]
+        if text_w > self.max_width:
+            mid = len(text) // 2
+            split_idx = mid
+            for punc in ["，", "、", " ", "；", ",", "。"]:
+                cand = text.find(punc, int(len(text) * 0.35), int(len(text) * 0.65))
+                if cand != -1:
+                    split_idx = cand + 1
+                    break
+            lines = [text[:split_idx].strip(), text[split_idx:].strip()]
+            text_w = max(sum(font.getlength(c) for c in line) for line in lines)
+            
         pad_x = 28
         pad_y = 14
+        line_height = int(target_size * 1.25)
         capsule_w = int(text_w + pad_x * 2)
-        capsule_h = int(target_size + pad_y * 2)
+        capsule_h = int(line_height * len(lines) + pad_y * 2)
         
         cap_x = (w - capsule_w) // 2
         cap_y = y_center - capsule_h // 2
@@ -68,7 +81,7 @@ class AdaptiveCapsuleSubtitle:
         # Draw translucent rounded capsule
         overlay = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
         draw = ImageDraw.Draw(overlay)
-        radius = capsule_h // 2
+        radius = min(24, capsule_h // 2)
         
         draw.rounded_rectangle(
             [cap_x, cap_y, cap_x + capsule_w, cap_y + capsule_h],
@@ -76,11 +89,12 @@ class AdaptiveCapsuleSubtitle:
             fill=(24, 24, 27, 205)
         )
         
-        # Draw centered crisp white text
-        text_x = cap_x + pad_x
-        # Align vertically in capsule
-        text_y = cap_y + (capsule_h - target_size) // 2 - 2
-        draw.text((text_x, text_y), text, font=font, fill=(255, 255, 255, 255))
+        # Draw centered crisp white text line by line
+        for idx, line in enumerate(lines):
+            lw = sum(font.getlength(c) for c in line)
+            line_x = cap_x + (capsule_w - lw) // 2
+            line_y = cap_y + pad_y + idx * line_height
+            draw.text((line_x, line_y), line, font=font, fill=(255, 255, 255, 255))
         
         canvas.paste(overlay, (0, 0), overlay)
         return canvas

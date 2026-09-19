@@ -24,19 +24,36 @@ build/
 *.mov
 *.avi
 *.mkv
+*.ogg
+*.opus
+*.wma
 
-# Project internal assets & rendering output
+# Project internal assets, audio & rendering output
 素材/
 output/
 qa_frames/
 raw_segments/
 temp/
+BGM/
 *.log
+
+# Private working drafts & scripts
+*剧本*.md
+*旁白*.md
+*.draft.md
 
 # Existing project scratch / private working directories
 projects/
 archive/
 tests/benchmark_test/
+
+# Case assets & examples isolation (Strictly exclude all binary media from templates and examples)
+examples/**/assets/
+examples/**/audio/
+examples/**/output/
+templates/**/assets/
+templates/**/audio/
+templates/**/output/
 
 # Keep template and example gitkeeps and configs
 !templates/**/.gitkeep

@@ -83,3 +83,9 @@ class StoryboardConfig:
                     return sc
                     
         return None
+
+# Backward compatibility & ergonomic alias
+ConfigParser = StoryboardConfig
+
+__all__ = ["StoryboardConfig", "ConfigParser"]
+

@@ -18,10 +18,9 @@ class DuckingMixer:
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
         
         # Audio filter complex for sidechain ducking
-        # [0:a] is voice from video, [1:a] is BGM
+        # [0:a] is voice from video, [1:a] is looping BGM
         filter_complex = (
-            f"[1:a]aloop=loop=-1:size=2e+09,aresample=44100[bgm_loop];"
-            f"[bgm_loop]asplit=2[sc][bgm_raw];"
+            f"[1:a]aresample=44100,asplit=2[sc][bgm_raw];"
             f"[0:a][sc]sidechaincompress=threshold=0.08:ratio=8:attack=30:release=350[voice_ducked];"
             f"[bgm_raw]volume={ducked_volume}[bgm_quiet];"
             f"[voice_ducked][bgm_quiet]amix=inputs=2:duration=first:dropout_transition=0,volume=1.8dB,alimiter=limit=0.98[aout]"
@@ -30,6 +29,7 @@ class DuckingMixer:
         cmd = [
             "ffmpeg", "-y",
             "-i", video_input,
+            "-stream_loop", "-1",
             "-i", bgm_input,
             "-filter_complex", filter_complex,
             "-map", "0:v",
@@ -38,8 +38,11 @@ class DuckingMixer:
             "-c:a", "aac",
             "-b:a", "320k",
             "-movflags", "+faststart",
+            "-shortest",
             output_path
         ]
         
-        subprocess.run(cmd, capture_output=True, check=True)
+        res = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if res.returncode != 0:
+            raise RuntimeError(f"FFmpeg ducking mixer failed:\n{res.stderr}")
         return output_path

@@ -9,7 +9,7 @@
 ## 🛠️ 一、 桌面自动化控制中枢 (`mcp_chatcut_desktop/`)
 
 - **定位**：连接 AI Agent 与 **剪映 / CapCut 桌面客户端** 的双向通信中枢。
-- **核心能力**：内置 **54 个原子工具 Schema** 与最佳实践说明（`instructions.md`），支持：
+- **核心能力**：内置 **60 个原子工具 Schema** 与最佳实践说明（`instructions.md`），支持：
   - `create_project` / `edit_project`：直接生成剪映标准本地草稿工程（JianYing Drafts）；
   - `edit_track` / `edit_item` / `split_item`：毫秒级操控时间线、切气口、贴画中画、对齐音轨；
   - `create_motion_graphic_from_code`：将前端代码生成的动态 MG 视效无缝塞入剪辑时间线；

@@ -12,7 +12,7 @@ python -m studio audio build
 python -m studio prompt generate
 
 # 3. 将外部工具 (Grok / Midjourney) 生成的原图放入 assets/masterframes/，并渲染单幕成片与 QA 走查
-python -m studio render scene --scene 1
+python -m studio render --scene 1
 
 # 4. 全幕走查通过后，全片无损拼接与 BGM 侧链动态闪避混音
 python -m studio assemble

@@ -225,3 +225,27 @@
   - 总大小：**17.7 MB**
 - **QA 走查总包**：`output/qa_frames/` 包含全幕代表性关键帧 `master_yunxi_scene1.jpg` ~ `master_yunxi_scene5.jpg`，文字、卡片、字幕与口播音画 100% 毫秒咬合无违规。
 
+---
+
+## 📅 阶段十二：CLI 自动化工坊实机快速测试与动态验证 (2026-09-20)
+
+### 1. 验证目标与执行范围
+- **CLI 根命令与子命令验证**：实测 `python -m studio.cli --help` 及其全部 5 个子命令 (`init`, `audio`, `prompt`, `render`, `assemble`) 的 `--help` 打印状态与退出码。
+- **模块纯净度与循环依赖走查**：排查 `studio` 命名空间下全部 30 个 Python 模块的依赖引用链路，修复子包 `__init__.py` 缺失与符号映射偏差。
+- **配置解析与提示词生成**：验证 `ConfigParser` / `StoryboardConfig` 对 `templates/default_project/storyboard.yaml` 规格配置的加载能力；验证 `PromptBuilder` 大模型同底画卷 4 幕及多幕提示词矩阵生成能力。
+- **依赖库与环境一致性核对**：比对 `requirements.txt` 声明版本与实机环境安装版本。
+
+### 2. 核心改进与测试结果
+- **包结构补全与兼容性增强**：
+  - 在 `studio/core/config.py` 与 `studio/core/__init__.py` 建立 `ConfigParser = StoryboardConfig` 兼容别名与导出规范；
+  - 规范补齐 `studio/audio/__init__.py`、`studio/engine/__init__.py`、`studio/prompt/__init__.py`，消除隐式依赖导致的循环加载隐患与符号不一致；
+  - 在 `tests/smoke_test.py` 补充 Windows 控制台 GBK 编码重定向自适应，防止非 UTF-8 控制台产生 `UnicodeEncodeError`。
+- **实机运行耗时与指标**：
+  - `requirements.txt` 4/4 项强依赖全部满足：`edge-tts 7.2.8` (>=6.1.12), `pillow 12.3.0` (>=10.0.0), `numpy 2.5.3` (>=1.24.0), `pyyaml 6.0.3` (>=6.0)；
+  - 30 个模块独立与联动 import 纯净无循环依赖，耗时 282ms，**0 警告，0 运行时错误**；
+  - `ConfigParser` 加载模板耗时 6.52ms，5 幕分镜与元数据索引 100% 匹配；
+  - `PromptBuilder` 提示词矩阵生成耗时 26.4µs，4 幕主母版画卷、15px 剪纸描边、人物肢体与同底置换提示词 100% 完整；
+  - CLI 根命令及 5 个子命令 `--help` 耗时约 400ms/条，全部返回退出码 0。
+- **测试套件交付**：新增自动化冒烟测试脚本 `tests/smoke_test.py`，支持 `python tests/smoke_test.py` 与 `pytest tests/smoke_test.py` 双模式直测，测试耗时仅 2.76s。
+
+

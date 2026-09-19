@@ -27,8 +27,10 @@ class SceneConcatenator:
             output_path
         ]
         
-        subprocess.run(cmd, capture_output=True, check=True)
+        res = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
         if os.path.exists(concat_txt):
             os.remove(concat_txt)
+        if res.returncode != 0:
+            raise RuntimeError(f"FFmpeg concatenation failed:\n{res.stderr}")
             
         return output_path

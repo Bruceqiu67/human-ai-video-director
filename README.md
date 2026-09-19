@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Edge-TTS](https://img.shields.io/badge/TTS-Edge--TTS-brightgreen.svg)](https://github.com/rany2/edge-tts)
 [![FFmpeg](https://img.shields.io/badge/Render-FFmpeg-red.svg)](https://ffmpeg.org/)
-[![Architecture](https://img.shields.io/badge/Architecture-In--Context%20Conditioning-orange.svg)]()
+[![Architecture](https://img.shields.io/badge/Architecture-In--Context%20Conditioning-orange.svg)](#️-整体架构与流水线-architecture)
 
 > **“骨骼与节奏归确定性工程，灵魂与神态归生成式 AI。”**
 >
@@ -123,7 +123,7 @@ python -m studio assemble --project my_project
 
 | 工具/技能名称 | 原开源项目仓库链接 | 核心特色与适用场景 |
 | :--- | :--- | :--- |
-| **`mcp_chatcut_desktop`** | 内置 MCP 协议中枢 | **剪映 / CapCut 桌面端自动化**：54 个原子工具直接操控本地剪辑轨道 |
+| **`mcp_chatcut_desktop`** | 内置 MCP 协议中枢 | **剪映 / CapCut 桌面端自动化**：60 个原子工具直接操控本地剪辑轨道 |
 | **`srt-whiteboard-animation`** | [geeklee/srt-whiteboard-animation](https://github.com/geeklee/srt-whiteboard-animation) | **暖白纸流墨手绘白板动画**：仿真实体笔触与知识点手绘涂鸦 |
 | **`anything2explainer`** | [Vincentwei1021/anything2explainer](https://github.com/Vincentwei1021/anything2explainer) | **黑底极简科技感讲解视频**：图灵宇宙风格，硬核算法与代码讲解 |
 | **`video-shotcraft`** | [Vincentwei1021/video-shotcraft](https://github.com/Vincentwei1021/video-shotcraft) | **157+ 镜头配方卡与 2.5D 动效分镜工坊**：Remotion 视觉动效全家桶 |

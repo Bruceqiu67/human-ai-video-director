@@ -125,7 +125,7 @@ def cmd_render(args):
     config = StoryboardConfig.load(config_path)
     renderer = SceneRenderer(config)
     
-    if args.all:
+    if args.all or (hasattr(args, "action") and args.action == "all"):
         print(f"Rendering all {len(config.scenes)} scenes in storyboard sequentially...")
         rendered = []
         for idx in range(1, len(config.scenes) + 1):
@@ -210,6 +210,7 @@ def main():
     
     # render
     p_render = subparsers.add_parser("render", help="Render scenes to MP4 with native stop-motion and subtitles")
+    p_render.add_argument("action", nargs="?", default="scene", choices=["scene", "all"], help="Optional render action ('scene' or 'all')")
     p_render.add_argument("--project", "-p", default="", help="Project directory or storyboard file")
     p_render.add_argument("--scene", "-s", default="", help="Scene ID or number to render (e.g. 1 or scene_01)")
     p_render.add_argument("--all", "-a", action="store_true", help="Render all scenes in storyboard")

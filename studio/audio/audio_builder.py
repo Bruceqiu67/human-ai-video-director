@@ -72,10 +72,13 @@ class AudioBuilder:
         scene_master_wav = os.path.join(self.audio_dir, f"{scene_id}_master.wav")
         
         # Mix tracks with adelay and brickwall peak limiter
-        filter_str = (
-            ";".join(filter_complex) + 
-            f";{''.join(track_labels)}amix=inputs={len(track_labels)}:dropout_transition=0,volume=2.0dB,alimiter=limit=0.98[outa]"
-        )
+        if len(track_labels) == 1:
+            filter_str = f"{filter_complex[0]};{track_labels[0]}volume=2.0dB,alimiter=limit=0.98[outa]"
+        else:
+            filter_str = (
+                ";".join(filter_complex) + 
+                f";{''.join(track_labels)}amix=inputs={len(track_labels)}:dropout_transition=0,volume=2.0dB,alimiter=limit=0.98[outa]"
+            )
         
         cmd = ["ffmpeg", "-y"] + inputs + [
             "-filter_complex", filter_str,
@@ -83,7 +86,9 @@ class AudioBuilder:
             "-t", str(scene_total_dur),
             scene_master_wav
         ]
-        subprocess.run(cmd, capture_output=True, check=True)
+        res = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if res.returncode != 0:
+            raise RuntimeError(f"FFmpeg audio mixing failed for {scene_id}:\n{res.stderr}")
         actual_dur = SilenceTrimmer.get_duration(scene_master_wav)
         
         return scene_master_wav, scene_manifest_segments, actual_dur

@@ -1,6 +1,6 @@
 ---
 name: human-ai-video-director
-description: 人机协同全流程 AI 短视频工业化创作工坊 (Human-AI Hybrid Video Studio)。面向任何产品推广、功能官宣、知识干货拆解与真人口播视频，提供从零到一的保姆级向导、5幕黄金剧本拆解、声音母带构建、大模型同底画卷提示词矩阵、定格动效渲染引擎 (studio CLI)、HyperFrames 代码动效以及剪映/CapCut 桌面端自动化交付。
+description: 人机协同全流程 AI 短视频工业化创作工坊 (Human-AI Hybrid Video Studio)。面向任何产品推广、功能官宣、知识干货拆解与真人口播视频，提供从零到一的保姆级向导、5幕黄金剧本拆解、声音母带构建、大模型同底画卷提示词矩阵、定格动效渲染引擎 (studio CLI)、HyperFrames 代码动效以及剪映/CapCut 桌面端自动化交付。Trigger when the user wants to make a video using their AI tools (Grok, Veo, Flow) combined with local video skills/MCP, mentions human-AI video collaboration, or asks how to direct and produce videos together.
 ---
 
 # human-ai-video-director：人机协同 AI 短视频工业化制作工坊
@@ -122,7 +122,7 @@ npx hyperframes render ./my_hyperframes_project -o ./output/video.mp4
 
 本项目内置了完整的周边视频创作工具箱生态，位于 `video_tools_ecosystem/` 目录：
 
-1. **`mcp_chatcut_desktop/`**：剪映 / CapCut 桌面端双向交互 MCP 协议中枢，内置 54 个原子工具 Schema 与操作指南。
+1. **`mcp_chatcut_desktop/`**：剪映 / CapCut 桌面端双向交互 MCP 协议中枢，内置 60 个原子工具 Schema 与操作指南。
 2. **`companion_skills/`**：收录 8 大顶尖开源视频制作 Skills：
    - **`srt-whiteboard-animation`**（[geeklee](https://github.com/geeklee/srt-whiteboard-animation)）：暖白纸流墨手绘白板动画；
    - **`anything2explainer`**（[Vincentwei1021](https://github.com/Vincentwei1021/anything2explainer)）：黑底极简科技感讲解视频；

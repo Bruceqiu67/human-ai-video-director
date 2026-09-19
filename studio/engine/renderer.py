@@ -199,7 +199,7 @@ class SceneRenderer:
             output_mp4
         ]
         
-        pipe = subprocess.Popen(cmd, stdin=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        pipe = subprocess.Popen(cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         
         qa_frame_indices = set([0, int(page_flip_dur * self.fps), total_frames - 1])
         for seg in segments:
@@ -209,44 +209,57 @@ class SceneRenderer:
         print(f"Rendering {total_frames} frames @ {self.fps}fps ({total_duration:.2f}s)...")
         last_frame = default_img
         
-        for frame_idx in range(total_frames):
-            t = frame_idx / self.fps
-            
-            # Layer 1: Base pose
-            current_frame = sequencer.get_frame(t).copy()
-            
-            # Page flip transition
-            if prev_anchor_img and t < page_flip_dur:
-                flip_progress = t / page_flip_dur
-                current_frame = PageFlipTransition.render(prev_anchor_img, current_frame, flip_progress)
+        try:
+            for frame_idx in range(total_frames):
+                t = frame_idx / self.fps
                 
-            # Layer 2: Camera slow push
-            push_progress = frame_idx / total_frames
-            current_frame = KenBurnsZoom.apply(current_frame, push_progress)
-            
-            # Layer 3: Subtitle overlay
-            active_text = ""
-            for seg in segments:
-                if seg["start"] <= t <= seg["end"]:
-                    active_text = seg["text"]
-                    break
+                # Layer 1: Base pose
+                current_frame = sequencer.get_frame(t).copy()
+                
+                # Page flip transition
+                if prev_anchor_img and t < page_flip_dur:
+                    flip_progress = t / page_flip_dur
+                    current_frame = PageFlipTransition.render(prev_anchor_img, current_frame, flip_progress)
                     
-            if active_text:
-                current_frame = self.subtitle_engine.render(current_frame, active_text, y_center=self.style.subtitle_y)
+                # Layer 2: Camera slow push
+                push_progress = frame_idx / total_frames
+                current_frame = KenBurnsZoom.apply(current_frame, push_progress)
                 
-            # Pipe to FFmpeg
-            raw_bytes = current_frame.tobytes()
-            pipe.stdin.write(raw_bytes)
-            
-            # Save QA frame if matched
-            if frame_idx in qa_frame_indices:
-                qa_path = os.path.join(scene_qa_dir, f"frame_{frame_idx:04d}_{t:.2f}s.jpg")
-                current_frame.convert("RGB").save(qa_path, quality=90)
-                
-            last_frame = current_frame
-            
-        pipe.stdin.close()
-        pipe.wait()
+                # Layer 3: Subtitle overlay
+                active_text = ""
+                for seg in segments:
+                    if seg["start"] <= t <= seg["end"]:
+                        active_text = seg["text"]
+                        break
+                        
+                if active_text:
+                    current_frame = self.subtitle_engine.render(current_frame, active_text, y_center=self.style.subtitle_y)
+                    
+                # Pipe to FFmpeg
+                raw_bytes = current_frame.tobytes()
+                try:
+                    pipe.stdin.write(raw_bytes)
+                except BrokenPipeError:
+                    _, err = pipe.communicate()
+                    err_msg = err.decode("utf-8", errors="replace") if err else "Unknown FFmpeg error"
+                    raise RuntimeError(f"FFmpeg pipeline broken while writing frame {frame_idx}:\n{err_msg}")
+                    
+                # Save QA frame if matched
+                if frame_idx in qa_frame_indices:
+                    qa_path = os.path.join(scene_qa_dir, f"frame_{frame_idx:04d}_{t:.2f}s.jpg")
+                    current_frame.convert("RGB").save(qa_path, quality=90)
+                    
+                last_frame = current_frame
+        finally:
+            if pipe.stdin and not pipe.stdin.closed:
+                try:
+                    pipe.stdin.close()
+                except Exception:
+                    pass
+            stdout, stderr = pipe.communicate()
+            if pipe.returncode != 0:
+                err_msg = stderr.decode("utf-8", errors="replace") if stderr else "Unknown error"
+                raise RuntimeError(f"FFmpeg render process failed with code {pipe.returncode}:\n{err_msg}")
         
         # Save last frame as anchor for next scene
         anchor_save_path = os.path.join(self.anchors_dir, f"{scene_id}_end.png")
