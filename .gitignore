@@ -36,6 +36,7 @@ temp/
 # Existing project scratch / private working directories
 projects/
 archive/
+tests/benchmark_test/
 
 # Keep template and example gitkeeps and configs
 !templates/**/.gitkeep

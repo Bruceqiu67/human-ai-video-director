@@ -51,23 +51,39 @@ class SceneRenderer:
         pose_map = {}
         default_img = None
         
-        # Search patterns in assets/masterframes/
-        patterns = [
-            os.path.join(self.masterframes_dir, f"{scene_id}*.*"),
-            os.path.join(self.masterframes_dir, f"*{scene_id}*.*"),
-            os.path.join(self.project_dir, "素材", "04_分幕原生画卷", f"*{scene_id}*.*"),
-            os.path.join(self.project_dir, "素材", f"*{scene_id}*.*")
+        # Support scene_01, scene01, Scene01, scene1, etc.
+        scene_num = "".join(c for c in scene_id if c.isdigit())
+        clean_id = scene_id.replace("_", "").lower()
+        num_int = str(int(scene_num)) if scene_num else ""
+        
+        search_dirs = [
+            self.masterframes_dir,
+            os.path.join(self.project_dir, "素材", "04_分幕原生画卷"),
+            os.path.join(self.project_dir, "素材")
         ]
         
         found_files = []
-        for pat in patterns:
-            found_files.extend(glob.glob(pat))
-            
+        for sdir in search_dirs:
+            if not os.path.exists(sdir):
+                continue
+            for fname in os.listdir(sdir):
+                fl = fname.lower()
+                # Check if this file belongs to the current scene
+                matched = False
+                if scene_id.lower() in fl or clean_id in fl:
+                    matched = True
+                elif scene_num and (f"scene{scene_num}" in fl or f"scene_{scene_num}" in fl):
+                    matched = True
+                elif num_int and (f"scene{num_int}" in fl or f"scene_{num_int}" in fl):
+                    matched = True
+                    
+                if matched and fl.endswith((".png", ".jpg", ".jpeg")):
+                    full_p = os.path.join(sdir, fname)
+                    if full_p not in found_files:
+                        found_files.append(full_p)
+                        
         # Deduplicate while preserving order
-        unique_files = []
-        for f in found_files:
-            if f not in unique_files and os.path.isfile(f) and f.lower().endswith((".png", ".jpg", ".jpeg")):
-                unique_files.append(f)
+        unique_files = found_files
                 
         # Load and resize
         loaded_images = []
