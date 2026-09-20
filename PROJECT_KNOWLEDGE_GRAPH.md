@@ -50,8 +50,12 @@ flowchart TD
         BGM["Director BGM Profile<br/>+ User Selected Track"] --> E3
         E2 --> E3["DuckingMixer<br/>(FFmpeg Sidechain Compress: BGM Ducked by Voice)"]
         E3 --> E4["Final Broadcast MP4 (1080x1920 30fps)"]
-        E4 --> F1["Direct Video Handover"]
-        A4 --> F2["MCP Protocol (mcp_chatcut_desktop)<br/>Headless JianYing/CapCut Draft Automation"]
+        E4 --> F1["Direct Video Handover (1080P Local Cut)"]
+        F1 --> F2{"Post-Render Platform Inquiry<br/>(Kling/Runway/Custom Option F)"}
+        F2 --> F3["Cinematic Directing SOP<br/>(CINEMATIC_VIDEO_PROMPTS.md)"]
+        F3 --> F4["External AI Video Clips -> assets/raw_video/"]
+        F4 -->|Round-trip Master Remux| E3
+        A4 --> F5["MCP Protocol (mcp_chatcut_desktop)<br/>Headless JianYing/CapCut Draft Automation"]
     end
 ```
 

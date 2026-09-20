@@ -110,3 +110,11 @@ python -m studio render --project my_cool_video --all
 ## 阶段 8：交付成片与二次精修
 - `output/video/<project>_1080P_Final.mp4` 即为无水印成品大片，可直接分发发布；
 - 需要轨道级细微调优时，可配合本项目内置的 `video_tools_ecosystem/mcp_chatcut_desktop` MCP 协议，无头驱动剪映桌面客户端进行轨道编辑。
+
+---
+
+## 阶段 9：AI 生视频升维与流体大片总装 (可选进阶)
+- 在确认本地 1080P 成片满意后，若希望画面元素彻底“活过来”，向 Agent 告知你所使用的平台（可灵/Runway/Luma/海螺/即梦/自由指定）；
+- Agent 为你定制专属的 `CINEMATIC_VIDEO_PROMPTS.md` 实战任务卡（含首尾帧路径强绑定与运镜滑块建议）；
+- 将外部平台生成的动态切片放入 `assets/raw_video/`，再次执行 `python -m studio assemble --project my_cool_video`，自动声画对齐生成流动大片！
+

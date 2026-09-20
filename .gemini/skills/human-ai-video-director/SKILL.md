@@ -20,13 +20,14 @@ description: 人机协同全流程 AI 短视频工业化创作工坊 (Human-AI H
 ```mermaid
 flowchart TD
     S0["第 0 步：已有素材盘点 (Asset Ingestion)<br/>探询用户是否有产品PNG/LOGO/原画/真人录音/专属BGM，自动分流接管"] --> S1
-    S1["第 1 步：导演前置问诊 (Director's Intake)<br/>主动呈现交互表单，开放视觉/转场/主体的 Option E 自由定制选项"] --> S2
-    S2["第 2 步：剧本定制与分镜确认 (Dynamic Scripting)<br/>自适应匹配幕数(10-15s微卡点2-3幕 / 30-45s标准3-4幕 / 60s深度5幕)，定制生成 storyboard.yaml"] --> S3
+    S1["第 1 步：导演前置创意问诊 (Director's Creative Intake)<br/>聚焦核心创意：用途受众、时长节奏、视觉风格(Option E)、主体与转场、声音与配乐"] --> S2
+    S2["第 2 步：剧本定制与分镜落盘 (Dynamic Scripting)<br/>自适应匹配幕数(10-15s微卡点2-3幕 / 30-45s标准3-4幕 / 60s深度5幕)，定制生成 storyboard.yaml"] --> S3
     S3["第 3 步：声音工程与时间锁死 (Audio-First)<br/>Edge-TTS 恒定自然语速直出(或真人口播对齐)，毫秒级 timestamps_manifest.json，0% 逐句变速"] --> S4
-    S4["第 4 步：同底画卷生图 + 专业生视频运镜指令 (Prompt & Camera Engine)<br/>导出 MASTER_PROMPTS.md 与 CINEMATIC_VIDEO_PROMPTS.md (含可灵/Runway/Luma专业运镜)"] --> S5
+    S4["第 4 步：同底提示词矩阵生图 (Masterframe Prompts)<br/>导出 MASTER_PROMPTS.md，四段式同底同质出图入库 assets/masterframes/"] --> S5
     S5["第 5 步：单幕隔离渲染与 QA 走查 (Scene Gating)<br/>定格瞬切/翻页 + 胶囊字幕 + 动效实装，每幕 QA 验收通过后再推进下一幕"] --> S6
-    S6["第 6 步：BGM 选型推荐与侧链汇流 (BGM Matching & Ducking)<br/>总导演提供 BGM 画像与搜索词，用户挑选满意音轨注入，侧链闪避无损拼合"] --> S7
-    S7["第 7 步：三轨交付 (Tri-Handover)<br/>交付 1080P 高清成片 + 剪映工程精修 + AI 生视频平台专业运镜指令外溢"]
+    S6["第 6 步：BGM 选型推荐与侧链汇流 (BGM Matching & Ducking)<br/>总导演提供 BGM 画像与搜索词，用户挑选满意音轨注入，侧链闪避无损拼合成 1080P 成片"] --> S7
+    S7["第 7 步：成片验收与 AI 视频平台后置问诊 (Post-Render Platform Inquiry)<br/>交付本地 1080P 广播级成片，展示成片效果，主动引导升维并问询所用 AI 视频平台(开放选项 F 自由定制)"] --> S8
+    S8["第 8 步：电影级 AI 生视频实操 SOP 全案与回流总装 (Cinematic SOP & Round-trip)<br/>按所选平台生成 CINEMATIC_VIDEO_PROMPTS.md，外部生成后回传 assets/raw_video/ 自动汇流"]
 ```
 
 ---
@@ -40,8 +41,8 @@ flowchart TD
   - **真人口播录音**：放入 `assets/audio/`（跳过 Edge-TTS，由真实波形驱动时间戳）；
   - **专属 BGM 音轨**：放入 `assets/bgm/`（跳过 BGM 推荐，直接应用动态侧链避让混音）。
 
-#### 📋 第 1 步：导演前置问诊交互表单 (Director's Interactive Intake)
-当用户触发 Skill 时，Agent 应主动抛出规范、亲切且带**自由定制（Option E）**的问诊引导：
+#### 📋 第 1 步：导演前置创意问诊交互表单 (Director's Creative Intake)
+当用户触发创作需求时，Agent 应聚焦于**剧本与视听创意本身**，主动抛出 5 个维度的问诊引导（禁止在此阶段过早询问 AI 视频生成平台，避免认知过载）：
 1. **【用途与受众】**：
    - A. 电商带货种草（重颜值、强氛围、高转化）
    - B. 软件产品功能官宣 / 极客演示（硬核、逻辑清晰、凸显破局解法）
@@ -64,13 +65,6 @@ flowchart TD
 5. **【声音与音乐偏好】**：
    - 阳光活力青年男声 (`Yunxi`) / 沉稳专业专家男声 (`Yunjian`) / 温暖知性女声 (`Xiaoxiao`) / 自由指定
    - 期望的 BGM 风格（轻松俏皮 Pop / 科技律动 Future Bass / 治愈暖调 Lo-Fi / 自由指定）
-6. **【目标 AI 视频平台与制作模式】**：
-   - A. 快手可灵 AI (Kling 3.0 / 1.5) - 推荐 5s/10s，图生视频首尾帧过渡模式，开启运镜控制/运动笔刷
-   - B. Runway Gen-3 (Alpha / Turbo) - 推荐 5s，Camera Control 六轴运镜滑块与首尾帧过渡
-   - C. Luma Dream Machine - 推荐 5s，自然语言运镜控制，支持 Extend 延长
-   - D. 海螺 AI (Minimax) / 智谱清影 - 推荐 6s，高物理动态
-   - E. 字节即梦 (Jimeng) - 推荐 3s/5s，中文首尾帧插值
-   - F. 本地纯定格轻量流水线 - 无需外部 AI 生视频，直接由 studio CLI 本地秒级交付 1080P 成品
 
 #### 📝 第 2 步：剧本定制与分镜落盘 (Dynamic Scripting & Storyboard Setup)
 - **导演动作**：根据问诊结果定制对白台词、动作姿态与动态 FX（每句建议 10~22 字，留足气口）；
@@ -80,15 +74,9 @@ flowchart TD
 - **执行命令**：`python -m studio audio build --project <project_name>`；
 - **技术要点**：统一自然恒定语速直出（`rate=+18% ~ +20%`），输出全片唯一真理源 `timestamps_manifest.json`；**严禁逐句强行变速**。
 
-#### 🎨 第 4 步：同底提示词矩阵 + 专业生视频实战 SOP 全案 (Prompt & Camera Motion Engine)
+#### 🎨 第 4 步：同底提示词矩阵生图 (Masterframe Prompts Generation)
 - **执行命令**：`python -m studio prompt generate --project <project_name>`；
-- **双重外溢交付**：
-  1. **`MASTER_PROMPTS.md`**：四段式生图指令，用户在 Midjourney/Grok 快速生成画卷存入 `assets/masterframes/`；
-  2. **`CINEMATIC_VIDEO_PROMPTS.md`**：**平台自适应生视频实战 SOP 全案**：
-     - **长视频拆解与 5s 窗口匹配**：全片自动切片为 3~5 秒独立微镜头，天然吻合各平台 5s 生成限制；
-     - **首尾帧无缝接力 (First-End Frame Relay)**：为每个分镜指明【首帧上传路径】与【尾帧接力路径】（末帧锚点/下一幕首图），解决镜头断崖变脸；
-     - **平台参数面板指南**：提供可灵运镜参数与 Runway 运镜滑块建议值，运动幅度锁定在 `3~4`（防融化）；
-     - **生成后闭环回传**：指导用户将生成的视频片段存入 `projects/<name>/assets/raw_video/`，便于本地自动汇流！
+- **交付内容**：输出 `MASTER_PROMPTS.md`，四段式生图指令，用户在 Midjourney/Grok 快速生成画卷存入 `assets/masterframes/`。
 
 #### 🎬 第 5 步：单幕隔离渲染与 QA 走查 (Scene Gating & Anchoring)
 - **执行命令**：`python -m studio render --project <project_name> --scene 1`（或全量渲染 `--all`）；
@@ -97,12 +85,27 @@ flowchart TD
 #### 🎚️ 第 6 步：BGM 选型推荐与动态侧链汇流 (BGM Matching & Ducking Assembly)
 - **导演动作**：提供专业 BGM 选型画像（风格、BPM 节拍、检索词），引导用户挑选后存入 `assets/bgm/`；
 - **执行命令**：`python -m studio assemble --project <project_name>`；
-- **技术要点**：无损拼接 + 动态侧链闪避（人声 12%，气口 25%）。
+- **技术要点**：无损拼接 + 动态侧链闪避（人声 12%，气口 25%），交付广播级 1080P 成品 MP4。
 
-#### 📦 第 7 步：三轨交付 (Tri-Handover)
-- **交付物 1（即刻发布）**：1080P / 30fps 广播级高清零水印成片 MP4；
-- **交付物 2（桌面精修）**：借助内置 `mcp_chatcut_desktop` 协议无头操控剪映桌面端；
-- **交付物 3（大模型运镜）**：提供专业文生/图生视频运镜提示词，支持在可灵/Runway 二次生成流动视频。
+#### 🚀 第 7 步：成片验收与 AI 视频平台后置问诊 (Post-Render Handover & Platform Inquiry)
+- **导演动作**：
+  1. 向用户展示刚刚生成的 1080P 本地成片（具备毫秒级精确对齐的字幕与侧链混音）；
+  2. 主动告知用户：“当前定格短片已完成！如果希望将画面升级为具有电影级推拉摇移、微距光影流动的大片，我们现在可以开启【电影级 AI 运镜与生视频升维】”；
+  3. 发起**目标 AI 视频平台问询（包含选项 F 自由定制）**：
+     - **A. 快手可灵 AI (Kling 3.0 / 1.5)**（推荐 5s/10s，首尾帧过渡模式，开启运镜控制/运动笔刷）
+     - **B. Runway Gen-3 (Alpha / Turbo)**（推荐 5s，Camera Control 六轴运镜滑块与首尾帧过渡）
+     - **C. Luma Dream Machine**（推荐 5s，自然语言运镜控制，支持 Extend 延长）
+     - **D. 海螺 AI (Minimax) / 智谱清影**（推荐 6s，高物理动态）
+     - **E. 字节即梦 (Jimeng)**（推荐 3s/5s，中文首尾帧插值）
+     - **F. 自由选择其他平台（用户输入）**（如 Sora, Pika, 腾讯混元等，Agent 实时根据该平台特性与限制量身定制运镜与首尾帧规则）
+     - **G. 保持当前本地定格成片，无需生成**
+
+#### 🎥 第 8 步：电影级 AI 生视频实操 SOP 全案与回流总装 (Cinematic SOP & Round-trip Assembly)
+- **交付内容**：根据用户选择的平台生成针对性极强的 `CINEMATIC_VIDEO_PROMPTS.md`：
+  - **长视频拆解与 5s 窗口匹配**：全片自动切片为 3~5 秒独立微镜头，天然吻合各平台 5s 生成限制；
+  - **首尾帧无缝接力 (First-End Frame Relay)**：明确每个分镜的【首帧上传路径】与【尾帧接力路径】（末帧锚点/下一幕首图），彻底解决镜头断崖变脸；
+  - **平台参数面板与运镜滑块指南**：运动幅度锁定在 `3~4`（防画面融化）；
+  - **外部视频本地自动汇流总装**：指导用户将生成的视频片段存入 `projects/<name>/assets/raw_video/`，本地执行 `studio assemble` 即可自动与**微软高清声音母带**毫秒级对齐压制，并施加**动态侧链避让混音**！
 
 ---
 

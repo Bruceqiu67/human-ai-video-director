@@ -98,10 +98,9 @@ flowchart TD
         AudioBuild --> Manifest["毫秒级时间戳清单: timestamps_manifest.json"]
     end
 
-    subgraph Phase3["第 4 步：同底画卷与生视频指令 (Prompt & Camera Engine)"]
+    subgraph Phase3["第 4 步：同底画卷生图 (Masterframe Prompts)"]
         Storyboard --> PromptGen["studio prompt generate"]
         PromptGen --> ImagePrompts["MASTER_PROMPTS.md (四段式同底生图)"]
-        PromptGen --> VideoPrompts["CINEMATIC_VIDEO_PROMPTS.md (可灵/Runway专业运镜)"]
     end
 
     subgraph Phase4["第 5 步：模块化隔离渲染与走查 (Modular Render & QA)"]
@@ -111,17 +110,26 @@ flowchart TD
         RenderEngine --> QAFrames["QA 关键帧走查 (output/qa_frames/)"]
     end
 
-    subgraph Phase5["第 6-7 步：全片大汇编与三轨交付 (Master Assembly & Handover)"]
+    subgraph Phase5["第 6 步：全片大汇编与交付 (Master Assembly & Local Delivery)"]
         SceneMP4 --> Concat["无损拼接 (UTF-8 无 BOM 安全保障)"]
         Concat --> Ducking["侧链闪避混音 (Ducking Mixer)"]
         BoxBGM --> Ducking
         Ducking --> FinalMP4["🏆 1080P/30fps 广播级成品 MP4"]
         FinalMP4 --> HandoverA["发布交付: 社交媒体即刻分发"]
         FinalMP4 --> HandoverB["桌面精修: 剪映/CapCut MCP 无头编辑"]
-        VideoPrompts --> HandoverC["生视频外溢: 输入可灵/Runway生成动态大片"]
     end
 
-    Phase0 --> Phase1 --> Phase2 --> Phase3 --> Phase4 --> Phase5
+    subgraph Phase6["第 7-8 步：成片验收与生视频升维 (Cinematic Upgrade & SOP)"]
+        FinalMP4 --> Review["成片验收满意"]
+        Review --> AskPlatform{"是否升级电影级流体运镜？<br/>问询目标平台 (可灵/Runway/自由指定)"}
+        AskPlatform --> VideoPrompts["CINEMATIC_VIDEO_PROMPTS.md<br/>(首尾帧接力 + 5s切片 + 运镜滑块)"]
+        VideoPrompts --> OutAI["外部 AI 视频平台生成动态切片"]
+        OutAI --> RawVideo["放入 assets/raw_video/"]
+        RawVideo --> ReAssemble["studio assemble (自动声画对齐与混音汇流)"]
+        ReAssemble --> MasterCinematic["🎬 电影级流体 AI 视频大片"]
+    end
+
+    Phase0 --> Phase1 --> Phase2 --> Phase3 --> Phase4 --> Phase5 --> Phase6
 ```
 
 ---
@@ -152,13 +160,12 @@ python -m studio init my_project
 python -m studio audio build --project my_project
 ```
 
-### 4. 导出大模型同底画卷与生视频专业运镜指令
+### 4. 导出大模型同底画卷生图矩阵
 ```bash
-# 一键导出生图画卷矩阵与电影级生视频运镜提示词
+# 一键导出生图画卷矩阵
 python -m studio prompt generate --project my_project
 ```
-- **生图画卷**：复制 `MASTER_PROMPTS.md` 指令至 Midjourney / Grok / Flux 出图，存入 `my_project/assets/masterframes/`；
-- **生视频外溢**：复制 `CINEMATIC_VIDEO_PROMPTS.md` 中的运镜指令，在可灵 (Kling) / Runway 输入首帧原画生成流体级运镜大片。
+*复制 `MASTER_PROMPTS.md` 指令至 Midjourney / Grok / Flux 出图，存入 `my_project/assets/masterframes/`。*
 
 ### 5. 场景隔离渲染与 QA 关键帧走查
 ```bash
@@ -173,6 +180,13 @@ python -m studio render --project my_project --scene 1
 python -m studio assemble --project my_project
 ```
 *成品视频立即交付至 `my_project/output/video/my_project_1080P_Final.mp4`！*
+
+### 7. 电影级 AI 运镜与生视频升维 (可选进阶)
+成片验收满意后，可唤醒生视频升级：
+1. 告知 Agent 你所使用的 AI 视频平台（可灵/Runway/Luma/海螺/即梦/自由指定）；
+2. 获取定制的 `CINEMATIC_VIDEO_PROMPTS.md` 实战任务卡；
+3. 将生成的外部视频片段存入 `my_project/assets/raw_video/`；
+4. 重新执行 `python -m studio assemble --project my_project`，秒级完成声画无缝总装！
 
 ---
 
