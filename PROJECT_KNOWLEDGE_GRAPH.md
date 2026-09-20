@@ -10,13 +10,14 @@
 
 ```mermaid
 flowchart TD
-    subgraph S1["1. 灵魂定调 (Concept & Script)"]
-        A1["User Prompt / Product Specs"] --> A2["5-Act Formula<br/>(Pain -> Pivot -> Battle -> Diagnosis -> CTA)"]
-        A2 --> A3["storyboard.yaml"]
+    subgraph S1["1. 导演前置问诊与剧本定制 (Director's Intake & Custom Script)"]
+        A1["User Request / Product Specs"] --> A2["Director Intake<br/>(Purpose / Audience / Style / Duration)"]
+        A2 --> A3["Dynamic Acts Formula<br/>(10-15s: 2-3 Acts | 30-45s: 3-4 Acts | 60s: 5 Acts)"]
+        A3 --> A4["storyboard.yaml"]
     end
 
     subgraph S2["2. 声音驱动中枢 (Audio-First Engine)"]
-        A3 --> B1["Edge-TTS (Yunxi/Yunjian)"]
+        A4 --> B1["Edge-TTS (Yunxi/Yunjian/Xiaoxiao)"]
         B1 --> B2["SilenceTrimmer<br/>(Head/Tail Silence Stripped)"]
         B2 --> B3["AudioBuilder (adelay + normalize=0 + apad)"]
         B3 --> B4["timestamps_manifest.json<br/>(Millisecond Truth Table)"]
@@ -24,19 +25,19 @@ flowchart TD
     end
 
     subgraph S3["3. 提示词矩阵与外生图 (Prompt Matrix & In-Context Conditioning)"]
-        A3 --> C1["PromptBuilder"]
-        C1 --> C2["MASTER_PROMPTS.md<br/>(4-Section Locked Template)"]
-        C2 --> C3["External Image Gen<br/>(Grok / MJ / Midjourney / Gemini)"]
+        A4 --> C1["PromptBuilder"]
+        C1 --> C2["MASTER_PROMPTS.md<br/>(Style & Character Decoupled)"]
+        C2 --> C3["External Image Gen<br/>(Grok / Midjourney / Gemini / Imagen)"]
         C3 --> C4["assets/masterframes/<br/>({SceneNN}_{Pose}.jpg)"]
     end
 
     subgraph S4["4. 确定性渲染核心 (Studio Scene Renderer)"]
         B4 & B5 & C4 --> D1["SceneRenderer"]
         D1 --> D2["Layer 1: StopMotionSequencer (Jump Cuts)"]
-        D1 --> D3["Layer 2: PageFlipTransition (2.5D Fold + Shadow)"]
+        D1 --> D3["Layer 2: PageFlipTransition (2.5D Fold or Jump Cut)"]
         D1 --> D4["Layer 3: Dynamic FX<br/>(Stamp / Marker / Pulse / Waveform / Badge)"]
         D1 --> D5["Layer 4: KenBurnsZoom (1.00x -> 1.03x Slow Push)"]
-        D1 --> D6["Layer 5: AdaptiveCapsuleSubtitle (Smart Wrap & Colors)"]
+        D1 --> D6["Layer 5: AdaptiveCapsuleSubtitle (Smart Wrap & Style Colors)"]
         D1 --> D7["FFmpeg Pipe (Subprocess with Log Stream)"]
         D7 --> D8["output/video/{scene_id}.mp4"]
         D1 --> D9["assets/anchors/{scene_id}_end.png<br/>(Pure Clean Base Anchor)"]
@@ -46,10 +47,11 @@ flowchart TD
     subgraph S5["5. 汇流合成与双轨交付 (Assembly & Dual Handover)"]
         D8 --> E1["SceneConcatenator<br/>(FFmpeg Concat Demuxer, UTF-8 without BOM)"]
         E1 --> E2["Raw Merged MP4"]
+        BGM["Director BGM Profile<br/>+ User Selected Track"] --> E3
         E2 --> E3["DuckingMixer<br/>(FFmpeg Sidechain Compress: BGM Ducked by Voice)"]
         E3 --> E4["Final Broadcast MP4 (1080x1920 30fps)"]
         E4 --> F1["Direct Video Handover"]
-        A3 --> F2["MCP Protocol (mcp_chatcut_desktop)<br/>Headless JianYing/CapCut Draft Automation"]
+        A4 --> F2["MCP Protocol (mcp_chatcut_desktop)<br/>Headless JianYing/CapCut Draft Automation"]
     end
 ```
 
