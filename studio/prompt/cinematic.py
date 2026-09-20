@@ -152,19 +152,24 @@ class CinematicPromptEngine:
 
             # Kling AI prompt format (Bilingual, camera-first)
             kling_prompt = (
-                f"【首帧图生视频指令】\n"
-                f"运镜指令：{preset['camera_zh']}\n"
-                f"主体物理动态：画面主体在保持第一帧外观与材质的前提下，产生自然的微呼吸感与轻微动态响应（{pose}），动作自然舒展，避免形变。\n"
-                f"环境与光影：背景环境光源产生自然的轻微光斑呼吸律动与漫反射，保持背景空间几何稳定。\n"
-                f"画质与稳定性：电影级商业质感，30fps超稳定动态，无融化，无画面撕裂，无文字扭曲。"
+                f"【运镜指令】{preset['camera_zh']}\n"
+                f"【主体动态】保持第一帧材质纹理与几何轮廓，进行微距呼吸与轻微动态响应（{pose}），动作平缓稳定，零融化。\n"
+                f"【光影漫射】演播室级漫反射光影流动，高光反射随视角平滑移动，背景空间几何完全锁定。\n"
+                f"【画质标准】电影级质感，30fps稳定帧率，物理拟真，无伪影。"
+            )
+            kling_negative = (
+                "画面撕裂，扭曲形变，融化，金属变软，肢体变异，突变镜头，频闪，水印，杂乱背景，低分辨率，模糊，卡顿，怪异手部，额外肢体，突兀变色，大幅度抽搐"
             )
 
             # Runway Gen-3 / Sora format (English strict camera-first formula)
             runway_prompt = (
                 f"[Camera]: {preset['camera_en']}\n"
-                f"[Subject Motion]: Based on the first frame, the subject performs: {pose}. Natural organic micro-movements and breathing rhythm, preserving character identity and texture without warping.\n"
-                f"[Lighting & Atmosphere]: Warm atmospheric light diffusion, realistic specular reflections, cinematic bokeh in background.\n"
-                f"[Stability & Quality]: 4K photorealistic product commercial, 30fps smooth cadence, locked geometry, no melting, no artifacting."
+                f"[Subject]: Strictly preserve first-frame geometry and textures, performing subtle micro-action: {pose}. Locked physical structure.\n"
+                f"[Lighting]: Subtle specular highlight displacement across surface, cinematic soft atmospheric diffusion, stable bokeh.\n"
+                f"[Quality]: 4K commercial quality, 30fps smooth cadence, zero morphing, zero jitter."
+            )
+            runway_negative = (
+                "morphing, melting, distortions, warped geometry, noisy, sudden cuts, camera jitter, text, watermark, extra limbs, deformed body, blurry, flickering, temporal artifacts, low resolution, unnatural bending"
             )
 
             results.append({
@@ -185,7 +190,9 @@ class CinematicPromptEngine:
                 "slider_kling": preset["slider_kling"],
                 "slider_runway": preset["slider_runway"],
                 "kling_prompt": kling_prompt,
+                "kling_negative": kling_negative,
                 "runway_prompt": runway_prompt,
+                "runway_negative": runway_negative,
                 "output_ai_name": f"scene_{scene_idx:02d}.mp4",
             })
 
@@ -210,6 +217,18 @@ class CinematicPromptEngine:
             ">    - **尾帧 (End Frame / 锚点过渡)**：若平台支持首尾帧，上传本镜头末帧锚点（`assets/anchors/`）或下一镜头首帧，平台将自动计算位移与光影过渡，彻底告别镜头切换跳脱！",
             "> 3. **Camera First 运镜法则**：机位指令绝对前置，一镜一动，相机轨迹与主体动作解耦，运动幅度锁定在 `3~4`（防融化）。",
             "> 4. **本地回流智能总装 (Round-trip Master Assembly)**：外部生成完成后，将视频存入 `assets/raw_video/`，本地执行一行命令即可与**微软高清声音母带**完成毫秒对齐与**动态侧链闪避混音**！",
+            "",
+            "---",
+            "",
+            "## 🛡️ 生产级「零抽卡」五大防线 (The 5 Anti-Gacha Engineering Rules)",
+            "> 为什么常规 AI 生视频需要重复抽卡 20 次？因为开环扩散模型在没有边界和负面约束时，潜在空间会产生无序发散，导致金属融化、人物变脸、镜头抽搐！",
+            "> 本工坊通过以下 5 道确定性防线将废片率降至最低：",
+            "",
+            "1. **【首尾双锚点定界】**：上传首帧母版图 + 尾帧锚点（或下一幕首图），将无限发散的推演收敛为首尾定界插值方程，模型物理结构被牢牢夹死；",
+            "2. **【机位与物理绝对解耦】**：恪守 One-Move Rule（一镜一动），相机只走平滑单一轨迹，主体仅保留微距呼吸与光影漫反射，杜绝指令冲突撕裂；",
+            "3. **【安全运动幅度阈值】**：严格锁定运动幅度为 `3 ~ 4`（Runway `2 ~ 3`），绝不使用容易导致融化崩坏的高运动阈值；",
+            "4. **【反向负面词重装甲 (Negative Shield)】**：为每个分镜提供工业级反向提示词，直接在采样前剔除频闪、形变、乱码与软化；",
+            "5. **【声画毫秒级锁相总装】**：彻底丢弃外部 AI 生成的廉价音效与变调人声，由本地 `studio assemble` 将高质量母带与 AI 画面无损对齐汇流！",
             "",
             "---",
             "",
@@ -251,28 +270,39 @@ class CinematicPromptEngine:
                 lines.append("")
 
                 if p["next_frame_path"]:
-                    lines.append(f"**【第 2 步 · 尾帧接力上传（可选，首尾帧平台专享）】**：")
+                    lines.append(f"**【第 2 步 · 尾帧接力上传（首尾帧平台专享，彻底锁定终点）】**：")
                     lines.append(f"- **尾帧输入 (Last Frame / End Anchor)** 上传：`{p['end_frame_path']}` 或下一幕首图 `{p['next_frame_path']}`")
-                    lines.append(f"- *作用：锁定镜头末尾位移，生成从当前姿态到下一状态的平滑物理过渡，无缝接力下一幕！*")
+                    lines.append(f"- *防抽卡作用：锁定镜头末尾位移与形态，两点定界消除形变与断崖！*")
                     lines.append("")
 
                 lines.append(f"**【第 3 步 · 平台参数面板设置】**：")
                 lines.append(f"- **生成时长**：`5s`（或 `6s`）")
-                lines.append(f"- **推荐运镜模式**：`{p['motion_type']}`")
+                lines.append(f"- **运动幅度 (Motion)**：锁定在 `3 ~ 4`（Runway 设置为 `2 ~ 3`，严禁超过 4.5）")
+                lines.append(f"- **运镜轨迹**：`{p['motion_type']}`")
                 lines.append(f"- **可灵运镜参数建议**：`{p['slider_kling']}`")
                 lines.append(f"- **Runway 滑块建议**：`{p['slider_runway']}`")
                 lines.append("")
 
-                lines.append(f"**【第 4 步 · 复制对应平台专用指令】**：")
-                lines.append("##### 🌟 方案 A：可灵 AI (Kling 3.0 / 海螺 AI) 专属中文指令")
+                lines.append(f"**【第 4 步 · 复制对应平台专用指令与反向装甲】**：")
+                lines.append("##### 🌟 方案 A：可灵 AI (Kling 3.0 / 海螺 AI / 即梦) 专属中文指令")
+                lines.append("- **正向提示词 (Positive)**（点击一键复制）：")
                 lines.append("```text")
                 lines.append(p["kling_prompt"])
                 lines.append("```")
+                lines.append("- **反向负面提示词 (Negative Shield)**（点击一键复制粘贴至反向提示词框）：")
+                lines.append("```text")
+                lines.append(p["kling_negative"])
+                lines.append("```")
                 lines.append("")
 
-                lines.append("##### ⚡ 方案 B：Runway Gen-3 / Luma Dream Machine / Sora 专属英文指令 (Camera First)")
+                lines.append("##### ⚡ 方案 B：Runway Gen-3 / Luma Dream Machine / Sora 专属英文指令")
+                lines.append("- **Positive Prompt** (Click to copy):")
                 lines.append("```text")
                 lines.append(p["runway_prompt"])
+                lines.append("```")
+                lines.append("- **Negative Prompt** (Paste into Runway negative prompt box):")
+                lines.append("```text")
+                lines.append(p["runway_negative"])
                 lines.append("```")
                 lines.append("")
 
