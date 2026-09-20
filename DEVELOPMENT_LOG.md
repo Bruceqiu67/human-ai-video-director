@@ -267,4 +267,33 @@
 - `python tests/smoke_test.py` 全绿，约 5.15s。
 - 对照报告：[`docs/FULL_PROJECT_REVIEW.md`](docs/FULL_PROJECT_REVIEW.md) 第 13 节（做了的 / 没做的）；每条 Issue 状态在第 5 节。
 
+---
+
+## 📅 阶段十四：排雷 Windows Concat BOM 隐患、案例提示词重导与 GitHub 交付推送 (2026-09-20 10:10)
+
+### 1. 深度排雷与核心修复 (Critical Bug Hunting & Patching)
+- **Windows FFmpeg Concat BOM 崩溃排雷**：
+  - 审查发现 Grok 在 `studio/assembly/concatenator.py` 将列表编码设为 `utf-8-sig` (带 BOM)，声称解决 Windows 中文路径。
+  - **实机白盒验证**：在 `d:\video\视频3` 中文路径下实测直接触发 FFmpeg 致命报错：`[concat] Line 1: unknown keyword '\ufefffile'`。
+  - **根本解决**：修正为标准无 BOM `utf-8`，实机运行两个 MP4 拼接测试通过（退出码 0，生成 3612 字节有效视频），并在 `tests/test_pipeline_contracts.py` 补充回归测试。
+- **案例与提示词通用化同步**：
+  - 调用 `python -m studio.cli prompt generate --project examples/01_sales_coach_template`，重导生成案例提示词文档 `examples/01_sales_coach_template/MASTER_PROMPTS.md`，彻底清除真人外貌硬编码。
+- **环境卫生防御**：
+  - 将本地运行临时目录 `.grok/` 追加进 `.gitignore`，防止 AI 记忆缓存污染版本控制。
+
+### 2. Skill 与全局文档双向对齐 (Skill Synchronization)
+- 同步更新项目级 `d:\video\视频3\.gemini\skills\human-ai-video-director\SKILL.md` 与全局 `C:\Users\26048\.gemini\config\skills\human-ai-video-director\SKILL.md`：
+  - 修正渲染命令格式为标准 `studio render --project <name> --scene <n>`（支持 `--all` 全量）；
+  - 声明 7 类原生画卷动效（印章下砸、荧光笔高亮、金色扫光、点击脉冲、音频波形、警示微颤等）；
+  - 更新真实动态侧链闪避参数机制（`idle_volume` 25% 自然回弹、`ducked_volume` 12% 讲话压低、`normalize=0` 防止音量衰减）；
+  - 澄清双轨交付定义：CLI 交付 1080P 零水印广播级 MP4，剪映桌面精修依托内置的 `mcp_chatcut_desktop` 协议交互。
+
+### 3. 全量测试与云端交付 (Verification & Remote Delivery)
+- **实机回归测试指标**：
+  - `pytest tests/test_pipeline_contracts.py`：14/14 passed in 0.42s；
+  - `python tests/smoke_test.py`：6 个 Phase 全绿，总耗时 3.016s，0 警告，0 错误。
+- **版本控制与远程发布**：
+  - 提交 Commit `d19d9bc`：*fix(engine): resolve review issues 1-35, harden audio pipeline, and sync skill*；
+  - 42 个文件变更（+2533, -1072），成功推送至 GitHub 远端 `origin/main`。
+
 
