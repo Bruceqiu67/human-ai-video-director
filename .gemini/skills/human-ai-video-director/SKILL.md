@@ -65,7 +65,8 @@ flowchart TD
 5. **【声音与音乐偏好】**：
    - 阳光活力青年男声 (`Yunxi`) / 沉稳专业专家男声 (`Yunjian`) / 温暖知性女声 (`Xiaoxiao`) / 自由指定
    - 期望的 BGM 风格（轻松俏皮 Pop / 科技律动 Future Bass / 治愈暖调 Lo-Fi / 自由指定）
-6. **【军火库生态与伴生 Skill 参考】(Video Arsenal & Companion Skills)**：
+6. **【军火库生态与伴生 Skill 参考】(Video Arsenal & Companion Skills - 可选，默认 A)**：
+   > *💡 备注：此项为可选进阶项（非必填）。若无特殊需求可直接跳过或选 A，工坊将默认采用原生标准工业管线；若希望融入特定视觉或动效（如白板手绘、代码拆解、火柴人或 3D WebGL），可在此勾选对应武器。*
    - **A. 默认标准工业流水线**（大模型同底画卷 + 定格瞬切/翻页 + 胶囊字幕 + 侧链混音）
    - **B. 暖白纸流墨手绘白板风**（参考/调用 `srt-whiteboard-animation`：仿真实体手绘涂鸦笔触）
    - **C. 黑底极简硬核科技代码风**（参考/调用 `anything2explainer`：图灵宇宙风格，高密参数与算法逻辑解构）
