@@ -68,6 +68,7 @@ flowchart TD
 | | `silence_trimmer.py` | 工业级静音剪切器；提取波形起止有效区间 | 原始语音 -> `trim.wav`，输出真实秒数 |
 | | `audio_builder.py` | 轨道毫秒级延迟混音；`apad` 填充尾音，`normalize=0` 防衰减 | 多句 `trim.wav` -> `_master.wav` 与段落时间戳 |
 | **`studio/prompt/`** | `prompt_builder.py` | 生成与出镜人解耦、与风格锁定的同底同质提示词矩阵 | 故事板 -> `MASTER_PROMPTS.md` |
+| | `cinematic.py` | 电影级运镜与生视频指令引擎（Camera First + One-Move Rule） | 故事板 -> `CINEMATIC_VIDEO_PROMPTS.md` (适配可灵/Runway/Luma) |
 | **`studio/engine/`** | `assets.py` | 健壮正则资产匹配（排除数字子串误判，合规版优先） | 搜索目录 + 姿态名 -> 本地图片路径 |
 | | `stopmotion.py` | 毫秒定格时间轴时钟驱动；半开区间 `[start, end)` | 当前时间 $t$ -> 目标姿态 Pillow 图像 |
 | | `transitions.py` | 2.5D 物理折痕翻书转场；双向阴影羽化与物理折线 | 上一幕底板 + 当前帧 -> 翻页合成帧 |

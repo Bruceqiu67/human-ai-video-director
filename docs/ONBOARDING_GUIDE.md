@@ -4,9 +4,19 @@
 
 ---
 
-## 阶段 1：导演前置问诊（定调三要素）
+## 阶段 0：已有素材接入与自动接管 (Asset Ingestion)
 
-在新建任何项目或写剧本前，必须先明确四大核心要素：
+如果你的项目已有现成素材，无需重复生产，直接放入对应目录即可自动接管：
+- **产品透明底 PNG / LOGO**：放入 `assets/user_assets/`（用于生图控制垫图或渲染贴图）；
+- **已有成套原画 / 海报**：放入 `assets/masterframes/`（直接跳过 AI 生图步骤）；
+- **真人口播音频**：放入 `assets/audio/`（跳过 Edge-TTS，自动对齐真实毫秒时间戳）；
+- **自定义 BGM 音频**：放入 `assets/bgm/`（跳过 BGM 推荐，直接做动态闪避混音）。
+
+---
+
+## 阶段 1：导演前置问诊（定调四要素）
+
+在新建任何项目或写剧本前，总导演将主动为你梳理四大核心要素：
 1. **产品用途与受众**：
    - 这个视频是做什么的？（电商种草、软件演示、品牌故事、硬核教程还是解压搞笑？）
    - 观众是谁？（年轻打工人、学生、技术极客、商务决策者？）
@@ -17,8 +27,10 @@
 3. **视觉风格与转场**：
    - `modern_tech`（现代科技 SaaS 风）：深空暗夜蓝底 (`#0F172A`)、赛博霓虹蓝、半透明深色玻璃拟态胶囊字幕；
    - `journal_scrapbook`（经典杂志手账风）：暖米白网格纸底 (`#FAF7F2`)、书脊折痕阴影、思源粗黑排版；
-   - 转场选择：干净硬切（`transition: none`，利落卡点主流）还是 2.5D 手账折痕翻书（`transition: page_flip`）；
-4. **出镜形象**：真实真人肖像、3D 拟人萌物角色、或是纯产品物料卡片。
+   - 3D 萌系黏土桌宠风、极简无印风；
+   - **自由定制风格（用户输入）**：支持输入任意自定义美学（如赛博朋克、复古胶片、黑白线条等）；
+   - **转场选择**：干净硬切（`transition: none`，卡点主流）、2.5D 物理翻书（`transition: page_flip`）或自由定制（快门闪白、推焦冲屏等）；
+4. **出镜形象**：真实真人肖像、3D 拟人萌物角色、产品物料卡片，或自由定制（3D 爆炸拆解、悬浮 UI 视差等）。
 
 ---
 
@@ -53,15 +65,14 @@ python -m studio audio build --project my_cool_video
 
 ---
 
-## 阶段 5：生画卷（3 分钟导出大模型同底画卷）
+## 阶段 5：生画卷与外溢生视频（大模型同底画卷 + 运镜指令）
 1. 运行命令导出提示词：
    ```bash
    python -m studio prompt generate --project my_cool_video
    ```
-2. 打开生成的 `my_cool_video/MASTER_PROMPTS.md`：
-   - 复制四段式提示词至 Grok / Midjourney / Gemini；
-   - 锁定第一张母版的背景与排版，后续姿态仅置换右侧动作表情；
-   - 将生成的画卷放入 `my_cool_video/assets/masterframes/`。
+2. 系统同时产出两份工业级指令文件：
+   - **`MASTER_PROMPTS.md`**：四段式生图指令，在外部大模型（Midjourney / Grok / Flux）中生成高清母版画卷，存入 `my_cool_video/assets/masterframes/`；
+   - **`CINEMATIC_VIDEO_PROMPTS.md`**：遵循电影镜头语言（Camera First + One-Move Rule）的生视频专业运镜指令，支持将母版图作为首帧输入**可灵 (Kling 3.0)、Runway Gen-3、Luma Dream Machine、海螺 AI**，一键生成真正活灵活现的运镜短视频！
 
 ---
 

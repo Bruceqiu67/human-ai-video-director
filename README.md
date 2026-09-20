@@ -96,20 +96,28 @@ python -m studio init my_project
 python -m studio audio build --project my_project
 ```
 
-### 4. 导出大模型提示词矩阵并在外部生图
+### 4. 导出大模型提示词矩阵与生视频运镜指令
 ```bash
-# 导出包含四段式同底直出指令的 MASTER_PROMPTS.md
+# 自动导出 MASTER_PROMPTS.md（同底画卷生图）与 CINEMATIC_VIDEO_PROMPTS.md（专业运镜生视频）
 python -m studio prompt generate --project my_project
 ```
-*将生成的原画放入 `my_project/assets/masterframes/` 目录。*
+- **生图画卷**：将生成的原画放入 `my_project/assets/masterframes/` 目录；
+- **生视频外溢**：直接复制 `CINEMATIC_VIDEO_PROMPTS.md` 中的工业级运镜指令（含可灵/Runway/Luma专属格式），将首帧原画丢入 AI 视频平台让视频彻底活过来！
 
-### 5. 单幕渲染与 QA 走查
+### 5. 用户自带素材自动接管 (User Assets Ingestion)
+如果已有部分物料，直接存入对应目录，系统自动智能接管分流：
+- **产品透明底 PNG / LOGO**：放入 `assets/user_assets/`（大模型生图垫图保持 100% 真实，或由引擎直接排版贴图）；
+- **已有成套原画 / 海报**：放入 `assets/masterframes/`（直接跳过第 4 步 AI 生图，免除重绘成本）；
+- **真人口播原声录音**：放入 `assets/audio/`（跳过 Edge-TTS，由 Whisper 毫秒时间戳驱动画面）；
+- **专属 BGM 音轨**：放入 `assets/bgm/`（跳过 BGM 推荐，直接应用动态侧链避让混音）。
+
+### 6. 单幕渲染与 QA 走查
 ```bash
 # 独立渲染第一幕成片并自动提取关键帧走查
 python -m studio render --project my_project --scene 1
 ```
 
-### 6. 全片无缝拼接与 BGM 动态闪避混音
+### 7. 全片无缝拼接与 BGM 动态闪避混音
 ```bash
 # 自动汇聚所有验收通过的分幕成片，应用侧链压缩混音
 python -m studio assemble --project my_project
