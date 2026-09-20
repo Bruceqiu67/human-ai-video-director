@@ -64,6 +64,13 @@ flowchart TD
 5. **【声音与音乐偏好】**：
    - 阳光活力青年男声 (`Yunxi`) / 沉稳专业专家男声 (`Yunjian`) / 温暖知性女声 (`Xiaoxiao`) / 自由指定
    - 期望的 BGM 风格（轻松俏皮 Pop / 科技律动 Future Bass / 治愈暖调 Lo-Fi / 自由指定）
+6. **【目标 AI 视频平台与制作模式】**：
+   - A. 快手可灵 AI (Kling 3.0 / 1.5) - 推荐 5s/10s，图生视频首尾帧过渡模式，开启运镜控制/运动笔刷
+   - B. Runway Gen-3 (Alpha / Turbo) - 推荐 5s，Camera Control 六轴运镜滑块与首尾帧过渡
+   - C. Luma Dream Machine - 推荐 5s，自然语言运镜控制，支持 Extend 延长
+   - D. 海螺 AI (Minimax) / 智谱清影 - 推荐 6s，高物理动态
+   - E. 字节即梦 (Jimeng) - 推荐 3s/5s，中文首尾帧插值
+   - F. 本地纯定格轻量流水线 - 无需外部 AI 生视频，直接由 studio CLI 本地秒级交付 1080P 成品
 
 #### 📝 第 2 步：剧本定制与分镜落盘 (Dynamic Scripting & Storyboard Setup)
 - **导演动作**：根据问诊结果定制对白台词、动作姿态与动态 FX（每句建议 10~22 字，留足气口）；
@@ -73,11 +80,15 @@ flowchart TD
 - **执行命令**：`python -m studio audio build --project <project_name>`；
 - **技术要点**：统一自然恒定语速直出（`rate=+18% ~ +20%`），输出全片唯一真理源 `timestamps_manifest.json`；**严禁逐句强行变速**。
 
-#### 🎨 第 4 步：同底提示词矩阵 + 专业生视频运镜指令外溢 (Prompt & Camera Motion Engine)
+#### 🎨 第 4 步：同底提示词矩阵 + 专业生视频实战 SOP 全案 (Prompt & Camera Motion Engine)
 - **执行命令**：`python -m studio prompt generate --project <project_name>`；
 - **双重外溢交付**：
   1. **`MASTER_PROMPTS.md`**：四段式生图指令，用户在 Midjourney/Grok 快速生成画卷存入 `assets/masterframes/`；
-  2. **`CINEMATIC_VIDEO_PROMPTS.md`**：遵循电影镜头语法（**Camera First + One-Move Rule**）的生视频专业运镜指令，一键适配**可灵 (Kling 3.0)、Runway Gen-3、Luma Dream Machine、海螺 AI**，让静态素材彻底活过来！
+  2. **`CINEMATIC_VIDEO_PROMPTS.md`**：**平台自适应生视频实战 SOP 全案**：
+     - **长视频拆解与 5s 窗口匹配**：全片自动切片为 3~5 秒独立微镜头，天然吻合各平台 5s 生成限制；
+     - **首尾帧无缝接力 (First-End Frame Relay)**：为每个分镜指明【首帧上传路径】与【尾帧接力路径】（末帧锚点/下一幕首图），解决镜头断崖变脸；
+     - **平台参数面板指南**：提供可灵运镜参数与 Runway 运镜滑块建议值，运动幅度锁定在 `3~4`（防融化）；
+     - **生成后闭环回传**：指导用户将生成的视频片段存入 `projects/<name>/assets/raw_video/`，便于本地自动汇流！
 
 #### 🎬 第 5 步：单幕隔离渲染与 QA 走查 (Scene Gating & Anchoring)
 - **执行命令**：`python -m studio render --project <project_name> --scene 1`（或全量渲染 `--all`）；

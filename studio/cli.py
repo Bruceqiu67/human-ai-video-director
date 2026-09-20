@@ -12,7 +12,7 @@ from studio.assembly.concatenator import SceneConcatenator
 from studio.assembly.ducking_mixer import DuckingMixer
 from studio.audio.audio_builder import AudioBuilder
 from studio.core.config import StoryboardConfig
-from studio.core.proc import require_ffmpeg
+from studio.core.proc import require_ffmpeg, run_command
 from studio.engine.renderer import SceneRenderer
 from studio.prompt.prompt_builder import PromptBuilder
 
@@ -118,15 +118,17 @@ scenes:
             )
 
     for rel in (
+        os.path.join("assets", "user_assets"),
         os.path.join("assets", "masterframes"),
         os.path.join("assets", "anchors"),
         os.path.join("assets", "bgm"),
+        os.path.join("assets", "raw_video"),
         "audio",
         os.path.join("output", "video"),
         os.path.join("output", "qa_frames"),
     ):
         os.makedirs(os.path.join(target_dir, rel), exist_ok=True)
-    for sub in ("masterframes", "anchors", "bgm"):
+    for sub in ("user_assets", "masterframes", "anchors", "bgm", "raw_video"):
         keep = os.path.join(target_dir, "assets", sub, ".gitkeep")
         if not os.path.exists(keep):
             with open(keep, "w", encoding="utf-8") as handle:
@@ -190,11 +192,38 @@ def cmd_assemble(args) -> None:
     video_dir = os.path.join(project_dir, "output", "video")
 
     scene_mp4s = []
+    raw_video_dir = os.path.join(project_dir, "assets", "raw_video")
     for sc in config.scenes:
         sc_id = sc.get("id")
         mp4_path = os.path.join(video_dir, f"{sc_id}.mp4")
+
+        # Check for AI-generated video in assets/raw_video/
+        raw_candidates = [
+            os.path.join(raw_video_dir, f"{sc_id}.mp4"),
+            os.path.join(raw_video_dir, f"{sc_id}_ai.mp4"),
+        ]
+        found_raw = next((p for p in raw_candidates if os.path.isfile(p)), None)
+        if found_raw:
+            master_audio = os.path.join(project_dir, "audio", f"{sc_id}_master.wav")
+            if os.path.exists(master_audio):
+                print(f"✓ Found external AI video for {sc_id} ({os.path.basename(found_raw)}). Remuxing with master voiceover...")
+                os.makedirs(video_dir, exist_ok=True)
+                remux_cmd = [
+                    "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
+                    "-i", found_raw,
+                    "-i", master_audio,
+                    "-c:v", "copy",
+                    "-c:a", "aac",
+                    "-shortest",
+                    mp4_path,
+                ]
+                run_command(remux_cmd)
+
         if not os.path.exists(mp4_path):
-            raise FileNotFoundError(f"Required scene file not found: {mp4_path}. Render it first.")
+            raise FileNotFoundError(
+                f"Required scene file not found: {mp4_path}. "
+                f"Render it with 'python -m studio render' or place AI video in 'assets/raw_video/{sc_id}.mp4'."
+            )
         scene_mp4s.append(mp4_path)
 
     concat_output = os.path.join(video_dir, f"{config.name}_raw_concat.mp4")

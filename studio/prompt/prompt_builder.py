@@ -91,54 +91,7 @@ class PromptBuilder:
 
     def generate_cinematic_markdown(self) -> str:
         from studio.prompt.cinematic import CinematicPromptEngine
-
-        lines = [
-            f"# 🎥 《{self.config.title}》大模型图生视频/文生视频专业运镜指令",
-            "## (Cinematic Video Directing Prompts for Kling / Runway / Luma / Sora / Minimax)",
-            "",
-            "> [!TIP]",
-            "> **AI 视频运镜指令四大铁律 (The Directing Golden Rules)**：",
-            "> 1. **Camera First (运镜指令前置)**：视频模型对首句机位权重最高，必须先写运镜轨迹，再写动作；",
-            "> 2. **One-Move Rule (一镜一动原则)**：单个 3~5 秒镜头严禁复合乱转，只专注一种平滑机位运动；",
-            "> 3. **Camera vs. Subject (相机与主体分离)**：镜头运动（Dolly/Pan/Orbit）与物体动作（Squish/Nod）严格分开；",
-            "> 4. **首帧图生视频 (I2V Mode)**：将生成的 `assets/masterframes/` 作为首帧输入可灵/Runway，直接复制下方对应指令。",
-            "",
-            "---",
-            "",
-        ]
-
-        total_scenes = len(self.config.scenes)
-        for idx, sc in enumerate(self.config.scenes, 1):
-            stage_tag = sc.get("stage_tag", f"STAGE {idx:02d}")
-            headline = sc.get("headline", "")
-            segments = sc.get("dialogue_segments", [])
-            prompts = CinematicPromptEngine.generate_scene_video_prompts(
-                idx, stage_tag, headline, segments, total_scenes, self.config.character_prompt
-            )
-
-            lines.append(f"## 🎬 分镜 Scene {idx:02d}：{stage_tag}（{headline}）")
-            lines.append("")
-
-            for p in prompts:
-                lines.append(f"### 镜头 {idx}.{p['pose_idx']}：{p['pose']}（预估时长: {p['duration']}）")
-                lines.append(f"- **台词旁白**：*{p['dialogue']}*")
-                lines.append(f"- **推荐运镜模式**：`{p['motion_type']}`")
-                lines.append("")
-                lines.append("#### 🌟 方案 A：可灵 AI (Kling 3.0 / 快手可灵) 专属指令")
-                lines.append("```text")
-                lines.append(p["kling_prompt"])
-                lines.append("```")
-                lines.append("")
-                lines.append("#### ⚡ 方案 B：Runway Gen-3 / Luma Dream Machine / Sora 专属指令 (English Pro)")
-                lines.append("```text")
-                lines.append(p["runway_prompt"])
-                lines.append("```")
-                lines.append("")
-
-            lines.append("---")
-            lines.append("")
-
-        return "\n".join(lines)
+        return CinematicPromptEngine.generate_full_sop_markdown(self.config)
 
     def export(self, output_file: str = "") -> str:
         target = output_file or os.path.join(self.project_dir, "MASTER_PROMPTS.md")

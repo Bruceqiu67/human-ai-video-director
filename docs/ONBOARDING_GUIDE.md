@@ -30,7 +30,8 @@
    - 3D 萌系黏土桌宠风、极简无印风；
    - **自由定制风格（用户输入）**：支持输入任意自定义美学（如赛博朋克、复古胶片、黑白线条等）；
    - **转场选择**：干净硬切（`transition: none`，卡点主流）、2.5D 物理翻书（`transition: page_flip`）或自由定制（快门闪白、推焦冲屏等）；
-4. **出镜形象**：真实真人肖像、3D 拟人萌物角色、产品物料卡片，或自由定制（3D 爆炸拆解、悬浮 UI 视差等）。
+4. **出镜形象**：真实真人肖像、3D 拟人萌物角色、产品物料卡片，或自由定制（3D 爆炸拆解、悬浮 UI 视差等）；
+5. **目标 AI 视频平台**：快手可灵 (5s/10s 首尾帧)、Runway Gen-3 (Camera Control 滑块)、Luma (Extend 模式)、海螺 AI (6s 动态) 或本地纯定格渲染。
 
 ---
 
@@ -100,11 +101,12 @@ python -m studio render --project my_cool_video --all
    ```bash
    python -m studio assemble --project my_cool_video
    ```
-   - 自动无损拼接各幕；
-   - 施加广播级动态侧链闪避：人声讲话时 BGM 自动压低至 12%，呼吸气口自然回弹至 25%。
+   - **自动检测 AI 视频**：若在 `assets/raw_video/` 放入了可灵/Runway 生成的 `scene_01.mp4`，系统自动优先接管，并与本地 `audio/scene_01_master.wav` 高清声音母带做毫秒级音画压制；
+   - **无缝直拼**：自动按分镜无损拼接全片；
+   - **动态侧链闪避**：施加广播级 Sidechain Ducking，人声讲话时 BGM 自动压低至 12%，呼吸气口自然回弹至 25%。
 
 ---
 
 ## 阶段 8：交付成片与二次精修
-- `output/video/<project>_1080P_Final.mp4` 即为无水印成片，可直接分发发布；
+- `output/video/<project>_1080P_Final.mp4` 即为无水印成品大片，可直接分发发布；
 - 需要轨道级细微调优时，可配合本项目内置的 `video_tools_ecosystem/mcp_chatcut_desktop` MCP 协议，无头驱动剪映桌面客户端进行轨道编辑。
