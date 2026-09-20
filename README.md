@@ -55,16 +55,22 @@
 - **自然恒定语速（0% 逐句 atempo 强行变速）**：采用微软 Edge-TTS 神经网络音色（阳光青年男声 `Yunxi`、专家男声 `Yunjian`、知性女声 `Xiaoxiao`），以恒定自然速率直出，自动剥离头尾静音并补齐呼吸气口留白，产出全片单一真理源 `timestamps_manifest.json`；
 - **动态侧链避让混音 (Sidechain Ducking)**：人声朗读时 BGM 自动平滑压低至 `12%`，停顿气口平滑回弹至 `25%`，人声干声清澈透亮，绝不喧宾夺主。
 
-### 4. 🎥 电影级 AI 运镜与生视频指令引擎 (Cinematic Directing Engine)
-不仅生成定格视频，更为外部大模型提供专业级运镜指令（`CINEMATIC_VIDEO_PROMPTS.md`），直通**快手可灵 (Kling 3.0)、Runway Gen-3、Luma Dream Machine、海螺 AI**：
-- **Camera First 原则**：机位运动置顶，强化模型注意力机制；
-- **One-Move Rule 纪律**：单镜头专注单一平滑机位（微距推进 `Dolly-In`、30°弧形立体环绕 `Subtle Orbit`、横向滑轨 `Truck`、全景后拉 `Dolly-Out`），彻底根治画面崩坏与“融化”；
-- **双模指令开箱即用**：方案 A（可灵中英文图生视频格式）+ 方案 B（Runway/Luma 工业级参数格式）。
+### 4. 🎥 电影级 AI 运镜与生视频实操 SOP 全案 (Cinematic Directing SOP & Multi-Shot Relay)
+不仅提供提示词，更为外部大模型提供了一整套**图文强绑定、分镜头切片与首尾帧接力**的工业化落地全案（`CINEMATIC_VIDEO_PROMPTS.md`），全面适配**快手可灵 (Kling 3.0)、Runway Gen-3、Luma Dream Machine、海螺 AI (Minimax)、字节即梦 (Jimeng)**：
+- **突破长视频生成限制 (Multi-Shot Chunking)**：针对主流平台单次只能生成 5s/10s 的硬件限制，工坊将全剧本按叙事节奏拆解为 3~5 秒独立微镜头切片，天然契合各平台 5s 生成窗口；
+- **首尾帧无缝接力 (First-End Frame Relay)**：
+  - **首帧 (First Frame)**：强绑定当前镜头母版原画（`assets/masterframes/SceneXX_pose_1.jpg`）；
+  - **尾帧 (End Frame / 锚点)**：绑定末帧锚点（`assets/anchors/scene_XX_end.png`）或下一镜头首图，由平台推演两点间的自然物理形变与位移，**彻底根除镜头切换断崖与变脸**；
+- **逐镜头实战任务卡 (Step-by-Step Production Cards)**：
+  - 明确实操步骤：【1.首帧上传路径】➔【2.尾帧接力路径】➔【3.平台参数与运镜滑块建议】➔【4.一键复制专属指令】➔【5.回传保存路径】；
+  - 严格恪守 **Camera First**（机位前置）、**One-Move Rule**（一镜一动）、运动幅度锁定在 `3~4`（防画面融化）；
+- **外部视频本地自动汇流总装 (Round-trip Master Assembly)**：
+  - 外部平台生成完成后，将视频放入 `assets/raw_video/`，本地执行 `studio assemble` 即可自动与**微软高清声音母带**毫秒级对齐压制，并施加**动态侧链避让混音**！
 
-### 5. 🧰 双轨交付与全套生态工具箱 (Dual Handover & Ecosystem)
-- **交付物 1**：1080×1920 (9:16) / 30fps 广播级高清零水印成片 MP4，开箱即可分发；
-- **交付物 2**：借助内置 `mcp_chatcut_desktop` 协议，无头驱动剪映/CapCut 桌面端进行轨道微调与贴纸增补；
-- **交付物 3**：开箱即用的专业生视频运镜提示词，支持将母版图作为首帧输入 AI 视频平台二次升维。
+### 5. 🧰 三轨交付与全套生态工具箱 (Tri-Handover & Ecosystem)
+- **交付物 1（即刻发布）**：1080×1920 (9:16) / 30fps 广播级高清零水印成片 MP4；
+- **交付物 2（桌面精修）**：借助内置 `mcp_chatcut_desktop` 协议，无头驱动剪映/CapCut 桌面端进行轨道微调与贴纸增补；
+- **交付物 3（大模型运镜）**：开箱即用的生视频实战 SOP 全案，支持在外部 AI 视频平台一键生成生动大片并回流总装。
 
 ---
 
@@ -190,6 +196,7 @@ human-ai-video-director/
 │       │   ├── user_assets/                 # 用户自带物料 (产品 PNG / LOGO)
 │       │   ├── masterframes/                # 各分镜母版原画 (命名: Scene01_pose_1.jpg)
 │       │   ├── anchors/                     # 场景转场末帧锚点
+│       │   ├── raw_video/                   # 外部 AI 平台生成的原始视频切片 (用于回流总装)
 │       │   └── bgm/                         # 专属背景音乐 (如: pop_beat.mp3)
 │       ├── audio/                           # 声音母带与 timestamps_manifest.json
 │       ├── output/
