@@ -327,6 +327,37 @@ scenes:
         assert os.path.isfile(os.path.join(tmp, "assets", "anchors", "scene_01_end.png"))
 
 
+def test_stop_motion_bounce_and_camera_director() -> None:
+    from PIL import Image
+    from studio.engine.camera import CameraDirector, KenBurnsZoom, StopMotionBounce
+
+    cut_times = [1.5, 3.0]
+    # Before cut: scale is 1.0
+    assert abs(StopMotionBounce.get_scale(1.0, cut_times) - 1.0) < 0.001
+    # Right inside the cut window (1.54s): scale punches out (> 1.01)
+    scale_punch = StopMotionBounce.get_scale(1.55, cut_times)
+    assert scale_punch > 1.01
+    # After cut window (1.80s): scale returns to 1.0
+    assert abs(StopMotionBounce.get_scale(1.80, cut_times) - 1.0) < 0.001
+
+    # Test CameraDirector.apply_combined
+    img = Image.new("RGBA", (100, 200), (255, 0, 0, 255))
+    res = CameraDirector.apply_combined(img, push_progress=0.5, t=1.55, cut_times=cut_times)
+    assert res.size == (100, 200)
+
+
+def test_prompt_builder_tripod_lock() -> None:
+    from studio.core.config import StoryboardConfig
+    from studio.prompt.prompt_builder import PromptBuilder
+
+    cfg = StoryboardConfig.load(
+        os.path.join(WORKSPACE_ROOT, "templates", "default_project", "storyboard.yaml")
+    )
+    md = PromptBuilder(cfg).generate_markdown()
+    assert "TRIPOD" in md
+    assert "DELTA POSE" in md or "微动姿态" in md
+
+
 def all_tests() -> list:
     return [
         test_pose_matching_scene_numbers,
@@ -343,6 +374,8 @@ def all_tests() -> list:
         test_empty_tts_text,
         test_missing_masterframe_raises,
         test_one_frame_render_if_ffmpeg,
+        test_stop_motion_bounce_and_camera_director,
+        test_prompt_builder_tripod_lock,
     ]
 
 

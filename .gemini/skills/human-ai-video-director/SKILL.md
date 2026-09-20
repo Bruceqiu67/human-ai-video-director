@@ -79,6 +79,10 @@ flowchart TD
 
 #### 📝 第 2 步：剧本定制与分镜落盘 (Dynamic Scripting & Storyboard Setup)
 - **导演动作**：根据问诊结果定制对白台词、动作姿态与动态 FX（每句建议 10~22 字，留足气口）；
+- **动作密度与同机位连环画铁律 (Action Density & Stop-Motion Discipline)**：
+  - **最低动作密度底线**：凡单幕时长 $\ge 2.5$ 秒，**必须规划至少 2~3 个连贯微动作姿态**（每个微动作时长控制在 $1.2\text{s} \sim 1.8\text{s}$，严禁单张静态死图硬撑 3 秒以上）；
+  - **同机位三脚架锁死 (Locked Rigid Tripod)**：同一幕内的所有姿态，**必须保持 100% 同一三脚架机位、同一背景环境、同一角色屏幕坐标 (x, y)**；
+  - **纯增量姿态演进 (Delta Pose Shift)**：姿态描述只能是微表情或微肢体动作（如：`正面微笑` ➔ `歪头眨眼` ➔ `轻微抬手`），**严禁在同一幕内随意更换背景道具、换键盘或突跳全景/特写**！
 - **呈递方案**：向用户呈递剧本，确认满意后执行 `python -m studio init <project_name>` 并写入 `storyboard.yaml`。
 
 #### 🎙️ 第 3 步：声音工程与时间锁死 (Audio-First Engineering)
@@ -87,11 +91,14 @@ flowchart TD
 
 #### 🎨 第 4 步：同底提示词矩阵生图 (Masterframe Prompts Generation)
 - **执行命令**：`python -m studio prompt generate --project <project_name>`；
-- **交付内容**：输出 `MASTER_PROMPTS.md`，四段式生图指令，用户在 Midjourney/Grok 快速生成画卷存入 `assets/masterframes/`。
+- **交付内容**：输出 `MASTER_PROMPTS.md`，包含三脚架绝对锁死指令与局部增量重绘指南（Midjourney Vary Region / Grok 低降噪），用户快速出图存入 `assets/masterframes/`。
 
 #### 🎬 第 5 步：单幕隔离渲染与 QA 走查 (Scene Gating & Anchoring)
 - **执行命令**：`python -m studio render --project <project_name> --scene 1`（或全量渲染 `--all`）；
-- **技术要点**：纯正定格抽帧瞬切或 2.5D 翻书，自适应居中胶囊字幕，自动提取 QA 关键帧走查。
+- **技术要点**：
+  - **定格动能回弹 (Stop-Motion Bounce)**：引擎在每个姿态跳切瞬间自动施加 0.16s 物理微弹冲（Scale Punch 1.024x），彻底消除 PPT 死图感；
+  - **无缝镜头推进**：单通道合并 Ken Burns 微距平滑缓推，保持亚像素画质锐利；
+  - **自适应胶囊字幕**：居中动态渲染，自动提取 QA 关键帧走查。
 
 #### 🎚️ 第 6 步：BGM 选型推荐与动态侧链汇流 (BGM Matching & Ducking Assembly)
 - **导演动作**：提供专业 BGM 选型画像（风格、BPM 节拍、检索词），引导用户挑选后存入 `assets/bgm/`；

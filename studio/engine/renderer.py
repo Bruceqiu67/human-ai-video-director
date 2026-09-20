@@ -15,7 +15,7 @@ from studio.engine.assets import (
     match_pose_filename,
     unique_pose_index,
 )
-from studio.engine.camera import KenBurnsZoom
+from studio.engine.camera import CameraDirector, KenBurnsZoom
 from studio.engine.fx.marker import MarkerFX
 from studio.engine.fx.pulse import PulseFX
 from studio.engine.fx.stamp import StampFX
@@ -355,6 +355,11 @@ class SceneRenderer:
         )
 
         qa_frame_indices = self._qa_indices(segments, total_frames, page_flip_dur, prev_anchor_img is not None)
+        cut_times = [
+            float(seg["start"])
+            for seg in segments
+            if float(seg.get("start", 0.0)) > 0.05
+        ]
         print(f"Rendering {total_frames} frames @ {self.fps}fps ({total_duration:.2f}s)...")
         last_t = (total_frames - 1) / self.fps
         broken = False
@@ -368,7 +373,9 @@ class SceneRenderer:
                     )
                 current_frame = self._apply_fx(current_frame, t, segments)
                 push_progress = frame_idx / max(1, total_frames - 1)
-                display_frame = KenBurnsZoom.apply(current_frame, push_progress)
+                display_frame = CameraDirector.apply_combined(
+                    current_frame, push_progress, t, cut_times, max_zoom=1.030
+                )
                 active_text = ""
                 for seg in segments:
                     if seg["start"] <= t < seg["end"]:
