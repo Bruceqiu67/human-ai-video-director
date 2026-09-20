@@ -248,4 +248,23 @@
   - CLI 根命令及 5 个子命令 `--help` 耗时约 400ms/条，全部返回退出码 0。
 - **测试套件交付**：新增自动化冒烟测试脚本 `tests/smoke_test.py`，支持 `python tests/smoke_test.py` 与 `pytest tests/smoke_test.py` 双模式直测，测试耗时仅 2.76s。
 
+---
+
+## 📅 阶段十三：按全量审查清单一轮修复与复查 (2026-09-20)
+
+### 1. 引擎与声音
+- 侧链改为压 BGM、人声干声；`idle_volume` 进入滤镜；`amix normalize=0`；`apad` 落实 `tail_pad`。
+- 选图按幕号锚定、姿态名优先、合规修补版优先；缺主画卷失败。
+- 渲染分发已知 FX；stderr 改文件避免 Windows 管道死锁；锚点不再带缓推/字幕。
+- 字幕吃风格色并强制折行；科技风不再画手账黑胶囊。
+
+### 2. CLI 与文档
+- `--project` 禁止回退 cwd；BGM 相对项目根；`render` 缺参数 exit 1。
+- concat 列表 UTF-8 BOM。SOP / README / Onboarding 去掉过期 atempo、800 元补贴承诺、假剪映双交付。
+
+### 3. 测试
+- `tests/test_pipeline_contracts.py` 14 项契约（含 1 帧 FFmpeg 实渲）。
+- `python tests/smoke_test.py` 全绿，约 5.15s。
+- 对照报告：[`docs/FULL_PROJECT_REVIEW.md`](docs/FULL_PROJECT_REVIEW.md) 第 13 节（做了的 / 没做的）；每条 Issue 状态在第 5 节。
+
 

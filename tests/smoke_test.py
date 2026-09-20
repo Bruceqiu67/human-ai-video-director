@@ -27,7 +27,7 @@ import importlib
 import pkgutil
 import subprocess
 import warnings
-from typing import List, Dict, Tuple
+from typing import List, Tuple
 
 
 # Add workspace root to sys.path
@@ -321,8 +321,17 @@ def run_smoke_test():
     for l in cli_logs:
         print(f"  {l}")
 
+    # 6. Pipeline contract tests (filters, matching, render stub)
+    print("\n[Phase 6] Running pipeline contract tests...")
+    contracts_dir = os.path.dirname(os.path.abspath(__file__))
+    if contracts_dir not in sys.path:
+        sys.path.insert(0, contracts_dir)
+    from test_pipeline_contracts import run_contract_tests
+    contract_code = run_contract_tests()
+    contract_passed = contract_code == 0
+
     total_duration = time.perf_counter() - total_start
-    all_ok = all([req_passed, import_passed, cfg_passed, prompt_passed, cli_passed])
+    all_ok = all([req_passed, import_passed, cfg_passed, prompt_passed, cli_passed, contract_passed])
 
     print("\n" + "=" * 70)
     if all_ok:

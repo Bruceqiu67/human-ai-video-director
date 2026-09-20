@@ -70,6 +70,6 @@ python -m studio assemble --project my_cool_video
 
 ---
 
-## 阶段 7：双交付（成片或剪映二次微调）
-- `output/video/my_cool_video_1080P_Final.mp4` 即为无水印成品，可直接发布；
-- 若需微调，可通过 `video_tools_ecosystem/mcp_chatcut_desktop` 自动生成剪映草稿工程，在剪映客户端用鼠标拖拽调整。
+## 阶段 7：交付成片（剪映为可选二次路径）
+- `output/video/<project>_1080P_Final.mp4` 即为无水印成品，可直接发布。
+- 剪映 / CapCut 草稿：**studio CLI 不生成剪映工程**。需要轨道级微调时，用 ChatCut Desktop 打开成片，或按 `video_tools_ecosystem/mcp_chatcut_desktop/` 的说明接入 MCP。

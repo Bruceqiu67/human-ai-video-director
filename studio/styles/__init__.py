@@ -7,6 +7,12 @@ STYLE_REGISTRY = {
     "modern_tech": ModernTechStyle,
 }
 
-def get_style(name: str) -> StyleProfile:
-    cls = STYLE_REGISTRY.get(name.lower(), JournalScrapbookStyle)
-    return cls()
+
+def get_style(name: str | None) -> StyleProfile:
+    if not name:
+        return JournalScrapbookStyle()
+    key = str(name).strip().lower().replace("-", "_")
+    if key not in STYLE_REGISTRY:
+        available = ", ".join(sorted(STYLE_REGISTRY))
+        raise ValueError(f"Unknown style {name!r}. Available: {available}")
+    return STYLE_REGISTRY[key]()

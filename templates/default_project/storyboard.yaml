@@ -11,6 +11,8 @@ project:
   resolution: [1080, 1920]          # 竖版高清短视频 (9:16)
   fps: 30                          # 标准帧率 (30fps)
   style_preset: "journal_scrapbook" # 风格预设: journal_scrapbook(手账杂志风) | modern_tech(科技SaaS风)
+  character:
+    prompt: "a young presenter matching the user-supplied reference portrait; keep identity, hair, glasses and outfit consistent across poses"
   
   audio:
     voice: "zh-CN-YunxiNeural"      # 推荐微软官方音色:

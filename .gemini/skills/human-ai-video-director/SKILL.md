@@ -64,22 +64,23 @@ flowchart TD
   - 将生成的同底画卷放入 `assets/masterframes/`。
 
 #### 🎬 第 5 步：跑单幕（单幕隔离渲染与 QA 走查）
-- **Agent 执行**：`python -m studio render scene --project <project_name> --scene 1`。
+- **Agent 执行**：`python -m studio render --project <project_name> --scene 1`（或全量渲染：`--all`）。
 - **核心规约**：
-  - 纯正手账定格抽帧瞬切（Jump Cut），杜绝恶心代码正弦微晃；
-  - 自适应圆角胶囊字幕，字音同源，超宽自动等比降号熔断防截断；
-  - 自动抽取关键帧至 `output/qa_frames/` 供 5 秒走查；
-  - 自动将真实最后一帧截取保存至 `assets/anchors/scene_01_end.png` 作为下一幕 2.5D 物理翻书的底板。用户确认满意后再推进下一幕！
+  - 纯正手账定格抽帧瞬切（Jump Cut），杜绝代码正弦伪晃；
+  - 动态实装 7 类画卷动效（印章下砸、荧光笔划线、金色扫光、点击脉冲、音频波形等）；
+  - 自适应圆角胶囊字幕，字音同源，超宽自动智能折行与降字号防溢出；
+  - 自动抽取关键帧至 `output/qa_frames/` 供 5 秒快速走查；
+  - 自动截取保存干净的末帧画卷至 `assets/anchors/scene_01_end.png` 作为下一幕 2.5D 物理翻书底板。用户确认满意后再推进下一幕！
 
 #### 🎚️ 第 6 步：总汇流（全片拼接与 BGM 动态闪避）
 - **Agent 执行**：`python -m studio assemble --project <project_name>`。
 - **技术要点**：
-  - 5 幕独立视频无损拼接；
-  - 挂载 BGM，应用 FFmpeg 动态侧链闪避（Sidechain Ducking）：人声讲话时 BGM 自动压低至 12%，停顿气口平滑回弹至 25%。
+  - 5 幕独立成片无损快速拼接（自动兼容中文路径）；
+  - 挂载 BGM，应用 FFmpeg 动态侧链闪避（Sidechain Ducking）：人声讲话时 BGM 自动压低至 12% (`ducked_volume`)，呼吸停顿气口平滑回弹至 25% (`idle_volume`)，`normalize=0` 保障人声干声透亮。
 
-#### 📦 第 7 步：双交付（全案交付与二次精修）
-- **交付物 1**：1080P / 30fps 广播级高清零水印成片（即刻可分发）；
-- **交付物 2**：联动 `video_tools_ecosystem/mcp_chatcut_desktop`，生成剪映 / CapCut 桌面草稿工程，所有轨道分层开放，用户可随时在剪映客户端用鼠标自由拖拽微调。
+#### 📦 第 7 步：双轨交付 (Dual Handover)
+- **交付物 1（即刻分发）**：1080P / 30fps 广播级高清零水印成品 MP4，音画完美锁相；
+- **交付物 2（桌面二次精修）**：配合本项目内置的 `mcp_chatcut_desktop` MCP 协议，Agent 可直接无头操控剪映 / CapCut 客户端进行轨道微调、音效增补与分发。
 
 ---
 

@@ -3,13 +3,13 @@
 
 > [!IMPORTANT]
 > **生图核心铁律 (The In-Context Non-Negotiables)**：
-> 1. **母版基底严格锁定**：背景网格纸纹/纯色折痕、装订阴影、左侧信息便签卡片、顶部标题文字 100% 保持印刷级原位；
-> 2. **同底同质多姿态直出**：严禁在代码中对文字卡片进行切片或渐变羽化！第二张、第三张图片以第一张母版作为图生图参考图，仅要求大模型置换右侧人物肢体动作与面部表情；
-> 3. **人物轮廓锁定**：人物边缘带 15px 纯白剪纸撕边轮廓，带柔和投射阴影，与背景浑然一体。
+> 1. **母版基底严格锁定**：背景、装订阴影、左侧信息卡、顶部标题文字 100% 保持印刷级原位；
+> 2. **同底同质多姿态直出**：严禁在代码中对文字卡片进行切片或渐变羽化；后续姿态以第一张母版为参考，仅置换人物动作与表情；
+> 3. **人物轮廓锁定**：与风格描述一致的剪纸/描边轮廓，带柔和投射阴影。
 
 ---
 
-## 🎨 Scene 01：STAGE 01 // 痛点觉醒
+## Scene 01：STAGE 01 // 痛点觉醒
 **核心主标题**：`刚开口，就被客户秒挂？`
 
 ### 画面 1（主母版画卷 · 初始姿态）
@@ -18,46 +18,46 @@
 
 【Background & Layout Lock】:
 - Warm off-white textured grid kraft paper background (#FAF7F2), vertical bookbinding crease with subtle soft center shadow, faint technical grid ruler lines, sleek silver mechanical pencil lying diagonally at the bottom left corner.
-- Top header typography: Small subtitle 'STAGE 01 // 痛点觉醒' in uppercase bold sans-serif, bold headline '刚开口，就被客户秒挂？' in clean Song/Hei print black ink.
-- Left side sticky note card: Off-white textured post-it note with tape at top, handwritten keynotes summarizing core topic.
+- Top header typography: Small subtitle 'STAGE 01 // 痛点觉醒' in uppercase bold sans-serif, bold headline '刚开口，就被客户秒挂？'.
+- Left side information card summarizing the core topic of this scene.
 
 【Character & Pose】:
-- On the right side, an East Asian young presenter (neat black hair, rectangular glasses, clean black crewneck t-shirt).
-- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow cast onto the background paper.
+- On the right side: a young presenter matching the user-supplied reference portrait; keep identity, hair, glasses and outfit consistent across poses.
+- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 - Initial Pose: 手持电话.
-- Seamless paper collage lighting, sharp graphic vector details, 8k resolution, no blurred seams.
+- Sharp graphic details, no blurred seams, no extra watermarks.
 ```
 
 ### 画面 2（同底置换姿态 2）
 ```markdown
 [Reference: Use Scene 01 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '刚开口，就被客户秒挂？', and pencil position.
+Maintain 100% identical background, left information card, top headline '刚开口，就被客户秒挂？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 愁眉苦脸看手机.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 3（同底置换姿态 3）
 ```markdown
 [Reference: Use Scene 01 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '刚开口，就被客户秒挂？', and pencil position.
+Maintain 100% identical background, left information card, top headline '刚开口，就被客户秒挂？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 捏鼻梁揉眉心.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 4（同底置换姿态 4）
 ```markdown
 [Reference: Use Scene 01 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '刚开口，就被客户秒挂？', and pencil position.
+Maintain 100% identical background, left information card, top headline '刚开口，就被客户秒挂？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 扶额叹气.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ---
 
-## 🎨 Scene 02：STAGE 02 // 破局重构
+## Scene 02：STAGE 02 // 破局重构
 **核心主标题**：`别担心，只是你练少了！`
 
 ### 画面 1（主母版画卷 · 初始姿态）
@@ -66,55 +66,55 @@ Replace ONLY the right-side character pose and facial expression:
 
 【Background & Layout Lock】:
 - Warm off-white textured grid kraft paper background (#FAF7F2), vertical bookbinding crease with subtle soft center shadow, faint technical grid ruler lines, sleek silver mechanical pencil lying diagonally at the bottom left corner.
-- Top header typography: Small subtitle 'STAGE 02 // 破局重构' in uppercase bold sans-serif, bold headline '别担心，只是你练少了！' in clean Song/Hei print black ink.
-- Left side sticky note card: Off-white textured post-it note with tape at top, handwritten keynotes summarizing core topic.
+- Top header typography: Small subtitle 'STAGE 02 // 破局重构' in uppercase bold sans-serif, bold headline '别担心，只是你练少了！'.
+- Left side information card summarizing the core topic of this scene.
 
 【Character & Pose】:
-- On the right side, an East Asian young presenter (neat black hair, rectangular glasses, clean black crewneck t-shirt).
-- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow cast onto the background paper.
+- On the right side: a young presenter matching the user-supplied reference portrait; keep identity, hair, glasses and outfit consistent across poses.
+- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 - Initial Pose: 主管没空教.
-- Seamless paper collage lighting, sharp graphic vector details, 8k resolution, no blurred seams.
+- Sharp graphic details, no blurred seams, no extra watermarks.
 ```
 
 ### 画面 2（同底置换姿态 2）
 ```markdown
 [Reference: Use Scene 02 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '别担心，只是你练少了！', and pencil position.
+Maintain 100% identical background, left information card, top headline '别担心，只是你练少了！'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 合规修补.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 3（同底置换姿态 3）
 ```markdown
 [Reference: Use Scene 02 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '别担心，只是你练少了！', and pencil position.
+Maintain 100% identical background, left information card, top headline '别担心，只是你练少了！'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 重磅上线.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 4（同底置换姿态 4）
 ```markdown
 [Reference: Use Scene 02 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '别担心，只是你练少了！', and pencil position.
+Maintain 100% identical background, left information card, top headline '别担心，只是你练少了！'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 食指点划.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 5（同底置换姿态 5）
 ```markdown
 [Reference: Use Scene 02 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '别担心，只是你练少了！', and pencil position.
+Maintain 100% identical background, left information card, top headline '别担心，只是你练少了！'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 握拳打满.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ---
 
-## 🎨 Scene 03：STAGE 03 // 拟真对攻
+## Scene 03：STAGE 03 // 拟真对攻
 **核心主标题**：`拟真对攻，零风险高压排雷`
 
 ### 画面 1（主母版画卷 · 初始姿态）
@@ -123,37 +123,37 @@ Replace ONLY the right-side character pose and facial expression:
 
 【Background & Layout Lock】:
 - Warm off-white textured grid kraft paper background (#FAF7F2), vertical bookbinding crease with subtle soft center shadow, faint technical grid ruler lines, sleek silver mechanical pencil lying diagonally at the bottom left corner.
-- Top header typography: Small subtitle 'STAGE 03 // 拟真对攻' in uppercase bold sans-serif, bold headline '拟真对攻，零风险高压排雷' in clean Song/Hei print black ink.
-- Left side sticky note card: Off-white textured post-it note with tape at top, handwritten keynotes summarizing core topic.
+- Top header typography: Small subtitle 'STAGE 03 // 拟真对攻' in uppercase bold sans-serif, bold headline '拟真对攻，零风险高压排雷'.
+- Left side information card summarizing the core topic of this scene.
 
 【Character & Pose】:
-- On the right side, an East Asian young presenter (neat black hair, rectangular glasses, clean black crewneck t-shirt).
-- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow cast onto the background paper.
+- On the right side: a young presenter matching the user-supplied reference portrait; keep identity, hair, glasses and outfit consistent across poses.
+- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 - Initial Pose: 食指指点.
-- Seamless paper collage lighting, sharp graphic vector details, 8k resolution, no blurred seams.
+- Sharp graphic details, no blurred seams, no extra watermarks.
 ```
 
 ### 画面 2（同底置换姿态 2）
 ```markdown
 [Reference: Use Scene 03 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '拟真对攻，零风险高压排雷', and pencil position.
+Maintain 100% identical background, left information card, top headline '拟真对攻，零风险高压排雷'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 扶眼镜吃惊.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 3（同底置换姿态 3）
 ```markdown
 [Reference: Use Scene 03 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '拟真对攻，零风险高压排雷', and pencil position.
+Maintain 100% identical background, left information card, top headline '拟真对攻，零风险高压排雷'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 双手抱胸.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ---
 
-## 🎨 Scene 04：STAGE 04 // 深度诊断
+## Scene 04：STAGE 04 // 深度诊断
 **核心主标题**：`第一次只有45分？`
 
 ### 画面 1（主母版画卷 · 初始姿态）
@@ -162,73 +162,73 @@ Replace ONLY the right-side character pose and facial expression:
 
 【Background & Layout Lock】:
 - Warm off-white textured grid kraft paper background (#FAF7F2), vertical bookbinding crease with subtle soft center shadow, faint technical grid ruler lines, sleek silver mechanical pencil lying diagonally at the bottom left corner.
-- Top header typography: Small subtitle 'STAGE 04 // 深度诊断' in uppercase bold sans-serif, bold headline '第一次只有45分？' in clean Song/Hei print black ink.
-- Left side sticky note card: Off-white textured post-it note with tape at top, handwritten keynotes summarizing core topic.
+- Top header typography: Small subtitle 'STAGE 04 // 深度诊断' in uppercase bold sans-serif, bold headline '第一次只有45分？'.
+- Left side information card summarizing the core topic of this scene.
 
 【Character & Pose】:
-- On the right side, an East Asian young presenter (neat black hair, rectangular glasses, clean black crewneck t-shirt).
-- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow cast onto the background paper.
+- On the right side: a young presenter matching the user-supplied reference portrait; keep identity, hair, glasses and outfit consistent across poses.
+- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 - Initial Pose: 耸肩错愕.
-- Seamless paper collage lighting, sharp graphic vector details, 8k resolution, no blurred seams.
+- Sharp graphic details, no blurred seams, no extra watermarks.
 ```
 
 ### 画面 2（同底置换姿态 2）
 ```markdown
 [Reference: Use Scene 04 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '第一次只有45分？', and pencil position.
+Maintain 100% identical background, left information card, top headline '第一次只有45分？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 耸肩错愕.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 3（同底置换姿态 3）
 ```markdown
 [Reference: Use Scene 04 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '第一次只有45分？', and pencil position.
+Maintain 100% identical background, left information card, top headline '第一次只有45分？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 托腮思考.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 4（同底置换姿态 4）
 ```markdown
 [Reference: Use Scene 04 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '第一次只有45分？', and pencil position.
+Maintain 100% identical background, left information card, top headline '第一次只有45分？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 托腮思考.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 5（同底置换姿态 5）
 ```markdown
 [Reference: Use Scene 04 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '第一次只有45分？', and pencil position.
+Maintain 100% identical background, left information card, top headline '第一次只有45分？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 托腮思考.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 6（同底置换姿态 6）
 ```markdown
 [Reference: Use Scene 04 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '第一次只有45分？', and pencil position.
+Maintain 100% identical background, left information card, top headline '第一次只有45分？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: OK自信.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 7（同底置换姿态 7）
 ```markdown
 [Reference: Use Scene 04 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '第一次只有45分？', and pencil position.
+Maintain 100% identical background, left information card, top headline '第一次只有45分？'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: OK自信.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ---
 
-## 🎨 Scene 05：STAGE 05 // 通关升华
+## Scene 05：STAGE 05 // 通关升华
 **核心主标题**：`打开好帮手，开启销冠之旅`
 
 ### 画面 1（主母版画卷 · 初始姿态）
@@ -237,50 +237,50 @@ Replace ONLY the right-side character pose and facial expression:
 
 【Background & Layout Lock】:
 - Warm off-white textured grid kraft paper background (#FAF7F2), vertical bookbinding crease with subtle soft center shadow, faint technical grid ruler lines, sleek silver mechanical pencil lying diagonally at the bottom left corner.
-- Top header typography: Small subtitle 'STAGE 05 // 通关升华' in uppercase bold sans-serif, bold headline '打开好帮手，开启销冠之旅' in clean Song/Hei print black ink.
-- Left side sticky note card: Off-white textured post-it note with tape at top, handwritten keynotes summarizing core topic.
+- Top header typography: Small subtitle 'STAGE 05 // 通关升华' in uppercase bold sans-serif, bold headline '打开好帮手，开启销冠之旅'.
+- Left side information card summarizing the core topic of this scene.
 
 【Character & Pose】:
-- On the right side, an East Asian young presenter (neat black hair, rectangular glasses, clean black crewneck t-shirt).
-- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow cast onto the background paper.
+- On the right side: a young presenter matching the user-supplied reference portrait; keep identity, hair, glasses and outfit consistent across poses.
+- Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 - Initial Pose: 握拳蓄力.
-- Seamless paper collage lighting, sharp graphic vector details, 8k resolution, no blurred seams.
+- Sharp graphic details, no blurred seams, no extra watermarks.
 ```
 
 ### 画面 2（同底置换姿态 2）
 ```markdown
 [Reference: Use Scene 05 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '打开好帮手，开启销冠之旅', and pencil position.
+Maintain 100% identical background, left information card, top headline '打开好帮手，开启销冠之旅'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 握拳蓄力.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 3（同底置换姿态 3）
 ```markdown
 [Reference: Use Scene 05 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '打开好帮手，开启销冠之旅', and pencil position.
+Maintain 100% identical background, left information card, top headline '打开好帮手，开启销冠之旅'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 开掌邀请.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 4（同底置换姿态 4）
 ```markdown
 [Reference: Use Scene 05 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '打开好帮手，开启销冠之旅', and pencil position.
+Maintain 100% identical background, left information card, top headline '打开好帮手，开启销冠之旅'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 开掌邀请.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ### 画面 5（同底置换姿态 5）
 ```markdown
 [Reference: Use Scene 05 Masterframe as primary image reference]
-Maintain 100% identical background grid, left sticky note card, top headline '打开好帮手，开启销冠之旅', and pencil position.
+Maintain 100% identical background, left information card, top headline '打开好帮手，开启销冠之旅'.
 Replace ONLY the right-side character pose and facial expression:
 - Target Pose: 点赞通关.
-- Keep exact same character identity, glasses, black t-shirt, and crisp 15px white cutout border.
+- Keep the same character identity. Character silhouette has a crisp, precise 15px pure white sticker paper-cut outline with a soft natural drop shadow.
 ```
 
 ---

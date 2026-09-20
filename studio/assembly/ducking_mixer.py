@@ -1,33 +1,54 @@
+"""BGM sidechain ducking: compress music when voice is present."""
+
+from __future__ import annotations
+
 import os
-import subprocess
+
+from studio.core.proc import require_ffmpeg, run_command
+
 
 class DuckingMixer:
-    """
-    Applies FFmpeg Sidechain Compression to dynamically duck BGM:
-    Lowers BGM to ~12% when speech is present, and smoothly recovers to ~25% during breath pauses.
-    """
-    
+    """Duck BGM from idle_volume (~25%) toward ducked_volume (~12%) while speech is present."""
+
+    @staticmethod
+    def build_filter_complex(
+        ducked_volume: float = 0.12,
+        idle_volume: float = 0.25,
+    ) -> str:
+        if idle_volume <= 0:
+            raise ValueError("idle_volume must be > 0")
+        if ducked_volume <= 0:
+            raise ValueError("ducked_volume must be > 0")
+        if ducked_volume >= idle_volume:
+            raise ValueError("ducked_volume must be < idle_volume (talking quieter than pauses)")
+
+        # BGM sits at idle_volume; compressor uses voice as the key (second input).
+        # Ratio tracks the idle/ducked span so both yaml knobs appear in the graph.
+        ratio = max(2.0, min(20.0, (idle_volume / ducked_volume) * 4.0))
+        return (
+            f"[1:a]aresample=44100,aformat=channel_layouts=stereo,"
+            f"volume={idle_volume}[bgm];"
+            f"[0:a]aresample=44100,aformat=channel_layouts=stereo[voice];"
+            f"[bgm][voice]sidechaincompress=threshold=0.05:ratio={ratio:.3f}:"
+            f"attack=30:release=350:level_sc=1[ducked];"
+            f"[voice][ducked]amix=inputs=2:duration=first:dropout_transition=0:"
+            f"normalize=0,alimiter=limit=0.98[aout]"
+        )
+
     @staticmethod
     def mix(
         video_input: str,
         bgm_input: str,
         output_path: str,
         ducked_volume: float = 0.12,
-        idle_volume: float = 0.25
+        idle_volume: float = 0.25,
     ) -> str:
+        require_ffmpeg()
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
-        
-        # Audio filter complex for sidechain ducking
-        # [0:a] is voice from video, [1:a] is looping BGM
-        filter_complex = (
-            f"[1:a]aresample=44100,asplit=2[sc][bgm_raw];"
-            f"[0:a][sc]sidechaincompress=threshold=0.08:ratio=8:attack=30:release=350[voice_ducked];"
-            f"[bgm_raw]volume={ducked_volume}[bgm_quiet];"
-            f"[voice_ducked][bgm_quiet]amix=inputs=2:duration=first:dropout_transition=0,volume=1.8dB,alimiter=limit=0.98[aout]"
-        )
-        
+        filter_complex = DuckingMixer.build_filter_complex(ducked_volume, idle_volume)
         cmd = [
             "ffmpeg", "-y",
+            "-hide_banner", "-loglevel", "error",
             "-i", video_input,
             "-stream_loop", "-1",
             "-i", bgm_input,
@@ -39,10 +60,7 @@ class DuckingMixer:
             "-b:a", "320k",
             "-movflags", "+faststart",
             "-shortest",
-            output_path
+            output_path,
         ]
-        
-        res = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
-        if res.returncode != 0:
-            raise RuntimeError(f"FFmpeg ducking mixer failed:\n{res.stderr}")
+        run_command(cmd)
         return output_path

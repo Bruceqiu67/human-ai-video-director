@@ -70,3 +70,4 @@ templates/**/output/
 Thumbs.db
 .vscode/
 .idea/
+.grok/

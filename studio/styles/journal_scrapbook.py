@@ -1,11 +1,9 @@
 from studio.styles.base import StyleProfile
 
+
 class JournalScrapbookStyle(StyleProfile):
-    """
-    Classic vintage journal / scrapbook paper cutout style:
-    Warm off-white textured kraft (#FAF7F2), Song/Hei print black,
-    neon orange highlighter, cinnabar red stamp impact.
-    """
+    """Classic vintage journal / scrapbook paper cutout style."""
+
     def __init__(self):
         super().__init__(
             name="journal_scrapbook",
@@ -19,5 +17,10 @@ class JournalScrapbookStyle(StyleProfile):
             subtitle_font_size=40,
             subtitle_max_width=920,
             subtitle_y=1680,
-            stamp_color=(220, 38, 38)
+            stamp_color=(220, 38, 38),
         )
+
+    def prompt_background_lines(self) -> list[str]:
+        return [
+            "- Warm off-white textured grid kraft paper background (#FAF7F2), vertical bookbinding crease with subtle soft center shadow, faint technical grid ruler lines, sleek silver mechanical pencil lying diagonally at the bottom left corner.",
+        ]

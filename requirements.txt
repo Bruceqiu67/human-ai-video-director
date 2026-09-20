@@ -1,7 +1,7 @@
 # Core Video Studio Engine Requirements
 edge-tts>=6.1.12
 pillow>=10.0.0
-numpy>=1.24.0
 pyyaml>=6.0
+packaging>=23.0
 
 # Note: FFmpeg (with libx264, aac, and sidechaincompress filter) must be installed and available in system PATH.

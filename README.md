@@ -63,7 +63,7 @@
       ┌─────────────────────────────────────────────────────────────┐
       │  Stage 5: 全片大汇编与智能混音 (Master Assembly)            │
       │  - 无损拼接全片 + BGM 侧链动态闪避 (开讲降至12%, 停顿回弹至25%)│
-      │  - 输出 1080P/30fps 广播级成品 MP4 + 导出剪映桌面草稿工程    │
+      │  - 输出 1080P/30fps 广播级成品 MP4（剪映工程需另走 ChatCut MCP）│
       └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -74,7 +74,7 @@
 ### 1. 环境准备
 ```bash
 # 克隆本仓库
-git clone https://github.com/your-username/human-ai-video-director.git
+git clone https://github.com/Bruceqiu67/human-ai-video-director.git
 cd human-ai-video-director
 
 # 安装 Python 依赖
@@ -175,7 +175,8 @@ human-ai-video-director/
 ├── video_tools_ecosystem/                    # 全套视频制作工具箱生态 (MCP + 8大Skills)
 ├── templates/default_project/               # 标准空白脚手架模版
 ├── examples/                                # 纯文本实战案例模板 (零大文件)
-├── docs/                                    # 开发者与使用手册
+├── docs/                                    # 开发者与使用手册（含全量审查报告）
+├── tests/                                   # 冒烟测试与流水线契约测试
 ├── requirements.txt                         # 依赖清册
 ├── .gitignore                               # 物理级隔离私有音视频大文件
 └── README.md                                # 项目主页
