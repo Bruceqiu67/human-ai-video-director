@@ -1,138 +1,218 @@
-# 🎬 human-ai-video-director
-### 人机协同全流程 AI 短视频工业化制作工坊 (Human-AI Hybrid Video Studio)
+# 🎬 Human-AI Video Director (人机协同短视频工业化制作工坊)
+### *From Concept & Assets to Broadcast-Grade 1080P MP4 and Cinematic AI Video Prompts in Minutes.*
 
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Edge-TTS](https://img.shields.io/badge/TTS-Edge--TTS-brightgreen.svg)](https://github.com/rany2/edge-tts)
-[![FFmpeg](https://img.shields.io/badge/Render-FFmpeg-red.svg)](https://ffmpeg.org/)
-[![Architecture](https://img.shields.io/badge/Architecture-In--Context%20Conditioning-orange.svg)](#️-整体架构与流水线-architecture)
+[![FFmpeg](https://img.shields.io/badge/Render-FFmpeg-red.svg?logo=ffmpeg&logoColor=white)](https://ffmpeg.org/)
+[![AI Video Platforms](https://img.shields.io/badge/AI%20Video-Kling%20%7C%20Runway%20%7C%20Luma-orange.svg)](#-电影级-ai-运镜与生视频指令引擎-cinematic-directing-engine)
+[![JianYing/CapCut MCP](https://img.shields.io/badge/Automation-CapCut%20MCP-blueviolet.svg)](#-双轨交付与全套生态工具箱-dual-handover--ecosystem)
 
-> **“骨骼与节奏归确定性工程，灵魂与神态归生成式 AI。”**
->
-> 告别纯代码硬搓假人立牌的生硬塑料感，告别纯大模型生视频的汉字乱码与界面形变。
-> 本项目将**大模型同底同质直出 (In-Context Conditioning)** 与 **参数化定格动画流水线 (Python/FFmpeg/Remotion/HyperFrames/剪映)** 深度咬合，实现高完播率、印刷级质感与极高交付确定性的短视频批量生产。
+> 💡 **核心哲学：**  
+> **“骨骼与节奏归确定性工程，灵魂与神态归生成式 AI。”**  
+> *Deterministic Engineering for Timing & Layout, Generative AI for Aesthetics & Motion.*
 
----
-
-## 🌟 核心特色 (Key Highlights)
-
-- 🚀 **保姆级 7 步交互式向导**：搭载专用 Agent Skill，小白用户只需输入想法，AI 自动完成从 5 幕剧本拆解、声音工程、Prompt 矩阵到成片输出的全套工序。
-- 🎯 **单一真理源 (Single Source of Truth)**：以结构化 `storyboard.yaml` 统领全片分幕、台词、姿态与动效，字幕与发音波形毫秒级绝对同源。
-- 🎨 **风格解耦系统 (Style Decoupling)**：默认内置**经典杂志手账风**（米白暖调纸底 `#FAF7F2` + 思源粗黑排版 + 荧光橙马克笔），并支持一键换装为**现代科技 SaaS 风**或自定义品牌调性。
-- 🗣️ **广播级声音工程**：微软高拟真语音（云希/云健/晓晓），严格坚持自然恒定语速直出（0% 逐句 atempo 变速），配合呼吸气口设计与 BGM 动态侧链闪避（Sidechain Ducking）。
-- 🖼️ **同底同质多姿态直出**：四段式生图指令锁死排版与文字，仅置换右侧出镜人物姿态表情，彻底根除代码羽化拼接带来的文字错位与重影。
-- ⚡ **代码级动效矩阵**：2.5D 物理卷边翻书、实体定格瞬切（Jump Cut）、复古印章下砸震颤、自适应防溢出胶囊字幕与呼吸微距缓推。
-- 🧰 **全套视频工具箱生态**：内置剪映/CapCut 桌面自动化 MCP 协议，并收录 **5 大顶级开源配套 Skills**（白板流墨动画、黑底科技科普、157+ 镜头配方、火柴人叙事、蜡笔手绘）。
+告别纯代码硬搓假人立牌的生硬塑料感，告别纯大模型生视频的汉字乱码与界面形变。  
+本项目将**大模型同底同质直出 (In-Context Conditioning)**、**参数化定格动画引擎 (studio CLI)**、**动态侧链混音**与**专业电影级生视频运镜指令**深度咬合，实现高完播率、印刷级质感与极高交付确定性的短视频工业化生产。
 
 ---
 
-## 🏗️ 整体架构与流水线 (Architecture)
+## ⚡ 为什么需要人机协同工坊？(The Paradigm Shift)
 
+当前 AI 短视频制作的三大痛点与工坊破局之道：
+
+| 生产维度 | 纯 AI 视频生成 (Pure Gen-Video) | 纯代码硬搓 (Remotion/代码拼贴) | 🌟 Human-AI Studio (本项目) |
+| :--- | :--- | :--- | :--- |
+| **汉字与版面** | ❌ 汉字乱码、品牌 LOGO 形变扭曲 | ✅ 排版清晰规整 | 🏆 **印刷级精准**：同底同质画卷锁死排版与文字 |
+| **角色与主体** | ❌ 镜头切换时人物变脸、产品走样 | ❌ 假人立牌生硬，缺乏呼吸感与立体光影 | 🏆 **生动一致**：大模型锁定特征直出，3D/实拍质感拉满 |
+| **运镜与动态** | ❌ 运镜随机不受控，多轴复合导致画面融化 | ❌ 仅能做简单平移缩放 | 🏆 **电影级运镜**：Camera First 工业级运镜指令直通外部平台 |
+| **声音与节奏** | ❌ 音画脱节，语速忽快忽慢 | ⚠️ 依赖手动打点切片，门槛高耗时长 | 🏆 **声音即时间轴**：毫秒级时间戳单一真理源驱动全片 |
+| **制作成本** | 💸 单条视频消耗昂贵算力，废片率 >70% | ⌛ 开发周期以天计算 | 🚀 **分钟级交付**：3 分钟同底生图，本地秒级渲染装配 |
+
+---
+
+## 🌟 五大核心工业化能力 (Core Superpowers)
+
+### 1. 🎬 导演级自适应问诊与自由定制 (Adaptive Director Protocol)
+- **拒绝死板套路**：彻底打破固定 5 幕限制，根据视频目标自适应匹配最佳节奏：
+  - **10s ~ 15s 极速微短片 / 卡点爆款**：适配 **2 ~ 3 幕**（痛点唤醒 ➔ 核心亮相 ➔ 立即行动 CTA）；
+  - **30s ~ 45s 中短视频 / 功能拆解**：适配 **3 ~ 4 幕**（痛点 ➔ 破局 ➔ 实操 ➔ 升华）；
+  - **50s ~ 65s 深度干货 / 标杆大片**：适配 **黄金 5 幕**（痛点 ➔ 破局 ➔ 对决 ➔ 诊断 ➔ 升华）。
+- **全要素自由定制（Option E）**：
+  - 视觉风格除了现代科技 (`modern_tech`)、经典手账 (`journal_scrapbook`)、3D 黏土萌系风外，支持**自由输入任意美学**（如赛博朋克、复古胶片、日系极简暖色、手绘涂鸦等）；
+  - 转场支持纯硬切（Jump Cut）、2.5D 物理翻书或自由定制（快门闪白、推焦冲屏等）；
+  - 画面主体支持静物特写、真人肖像、3D 吉祥物、爆炸拆解图或 UI 悬浮交互。
+
+### 2. 📥 零摩擦已有素材自动接管 (Zero-Friction Asset Ingestion)
+如果手头已有素材，流水线自动识别并无缝接管分流，免除二次重复生成：
+- **产品透明底 PNG / 矢量 LOGO**：放入 `assets/user_assets/`（作为大模型生图垫图保持 100% 细节真实，或由引擎直接排版贴图）；
+- **已有成套原画 / 实拍分镜海报**：放入 `assets/masterframes/`（**直接跳过第 4 步 AI 生图**，零重绘成本）；
+- **真人口播录音 / 现成音频**：放入 `assets/audio/`（跳过 Edge-TTS，由真人真实声波时间戳驱动画面）；
+- **专属定制 BGM**：放入 `assets/bgm/`（跳过 BGM 检索，直接对其施加侧链动态避让混音）。
+
+### 3. 🎙️ 广播级声音工程与时间锁死 (Audio-First & Sidechain Ducking)
+- **声音即时间轴（Audio-First）**：全片时长由配音波形起止点唯一决定，拒绝画面倒逼声音！
+- **自然恒定语速（0% 逐句 atempo 强行变速）**：采用微软 Edge-TTS 神经网络音色（阳光青年男声 `Yunxi`、专家男声 `Yunjian`、知性女声 `Xiaoxiao`），以恒定自然速率直出，自动剥离头尾静音并补齐呼吸气口留白，产出全片单一真理源 `timestamps_manifest.json`；
+- **动态侧链避让混音 (Sidechain Ducking)**：人声朗读时 BGM 自动平滑压低至 `12%`，停顿气口平滑回弹至 `25%`，人声干声清澈透亮，绝不喧宾夺主。
+
+### 4. 🎥 电影级 AI 运镜与生视频指令引擎 (Cinematic Directing Engine)
+不仅生成定格视频，更为外部大模型提供专业级运镜指令（`CINEMATIC_VIDEO_PROMPTS.md`），直通**快手可灵 (Kling 3.0)、Runway Gen-3、Luma Dream Machine、海螺 AI**：
+- **Camera First 原则**：机位运动置顶，强化模型注意力机制；
+- **One-Move Rule 纪律**：单镜头专注单一平滑机位（微距推进 `Dolly-In`、30°弧形立体环绕 `Subtle Orbit`、横向滑轨 `Truck`、全景后拉 `Dolly-Out`），彻底根治画面崩坏与“融化”；
+- **双模指令开箱即用**：方案 A（可灵中英文图生视频格式）+ 方案 B（Runway/Luma 工业级参数格式）。
+
+### 5. 🧰 双轨交付与全套生态工具箱 (Dual Handover & Ecosystem)
+- **交付物 1**：1080×1920 (9:16) / 30fps 广播级高清零水印成片 MP4，开箱即可分发；
+- **交付物 2**：借助内置 `mcp_chatcut_desktop` 协议，无头驱动剪映/CapCut 桌面端进行轨道微调与贴纸增补；
+- **交付物 3**：开箱即用的专业生视频运镜提示词，支持将母版图作为首帧输入 AI 视频平台二次升维。
+
+---
+
+## 🏗️ 工业化全流程管线架构 (Pipeline Architecture)
+
+```mermaid
+flowchart TD
+    subgraph Phase0["第 0 步：物料盘点与自动接管 (Asset Ingestion)"]
+        UserAssets["用户素材 (PNG/海报/真人录音/BGM)"]
+        UserAssets -->|分类存放| IngestCheck{"是否已有物料？"}
+        IngestCheck -->|PNG/LOGO| BoxUser["assets/user_assets/ (垫图/排版)"]
+        IngestCheck -->|原画/海报| BoxFrame["assets/masterframes/ (跳过生图)"]
+        IngestCheck -->|真人录音| BoxAudio["assets/audio/ (真实波形驱动)"]
+        IngestCheck -->|专属音乐| BoxBGM["assets/bgm/ (直接混音)"]
+    end
+
+    subgraph Phase1["第 1-2 步：导演问诊与剧本定制 (Intake & Scripting)"]
+        Director["专业 AI 视频总导演问诊"]
+        Director -->|确定用途/受众/节奏/Option E自由定制| Storyboard["单一真理源: storyboard.yaml"]
+    end
+
+    subgraph Phase2["第 3 步：声音工程与时间锁死 (Audio Engineering)"]
+        Storyboard --> AudioBuild["studio audio build"]
+        AudioBuild --> MasterWAV["分幕母带 WAV (自然恒定语速)"]
+        AudioBuild --> Manifest["毫秒级时间戳清单: timestamps_manifest.json"]
+    end
+
+    subgraph Phase3["第 4 步：同底画卷与生视频指令 (Prompt & Camera Engine)"]
+        Storyboard --> PromptGen["studio prompt generate"]
+        PromptGen --> ImagePrompts["MASTER_PROMPTS.md (四段式同底生图)"]
+        PromptGen --> VideoPrompts["CINEMATIC_VIDEO_PROMPTS.md (可灵/Runway专业运镜)"]
+    end
+
+    subgraph Phase4["第 5 步：模块化隔离渲染与走查 (Modular Render & QA)"]
+        Manifest --> RenderEngine["studio render --scene N / --all"]
+        BoxFrame --> RenderEngine
+        RenderEngine --> SceneMP4["单幕 MP4 (定格瞬切/翻页/胶囊字幕/动效)"]
+        RenderEngine --> QAFrames["QA 关键帧走查 (output/qa_frames/)"]
+    end
+
+    subgraph Phase5["第 6-7 步：全片大汇编与三轨交付 (Master Assembly & Handover)"]
+        SceneMP4 --> Concat["无损拼接 (UTF-8 无 BOM 安全保障)"]
+        Concat --> Ducking["侧链闪避混音 (Ducking Mixer)"]
+        BoxBGM --> Ducking
+        Ducking --> FinalMP4["🏆 1080P/30fps 广播级成品 MP4"]
+        FinalMP4 --> HandoverA["发布交付: 社交媒体即刻分发"]
+        FinalMP4 --> HandoverB["桌面精修: 剪映/CapCut MCP 无头编辑"]
+        VideoPrompts --> HandoverC["生视频外溢: 输入可灵/Runway生成动态大片"]
+    end
+
+    Phase0 --> Phase1 --> Phase2 --> Phase3 --> Phase4 --> Phase5
 ```
-                            [ 用户创意 / 需求 ]
-                                     │
-                                     ▼
-      ┌─────────────────────────────────────────────────────────────┐
-      │  Stage 1: 灵魂定调 (Concept & Script)                        │
-      │  - 黄金 5 幕结构拆解 (Hook ➔ Solution ➔ Simulation ➔ CTA)   │
-      │  - 产出单一真理源: storyboard.yaml                          │
-      └──────────────────────────────┬──────────────────────────────┘
-                                     │
-                                     ▼
-      ┌─────────────────────────────────────────────────────────────┐
-      │  Stage 2: 声音工程与时间锚定 (Audio Engineering)            │
-      │  - Edge-TTS 恒定自然语速直出 (Yunxi/Yunjian)               │
-      │  - 毫秒级时间戳清单: timestamps_manifest.json (时间锚点锁死) │
-      └──────────────────────────────┬──────────────────────────────┘
-                                     │
-                                     ▼
-      ┌─────────────────────────────────────────────────────────────┐
-      │  Stage 3: 同底画卷生图矩阵 (In-Context Prompt Matrix)        │
-      │  - 导出 MASTER_PROMPTS.md (版面100%像素级锁定)              │
-      │  - 用户在外部工具 (Grok/MJ/Gemini) 3分钟出图放入 masterframes │
-      └──────────────────────────────┬──────────────────────────────┘
-                                     │
-                                     ▼
-      ┌─────────────────────────────────────────────────────────────┐
-      │  Stage 4: 模块化定格渲染与状态锚定 (Modular Render Engine)    │
-      │  - 2.5D 物理翻书 + 实体定格瞬切 + 自适应居中防溢出胶囊字幕     │
-      │  - 单幕独立成片交付 + 抽取 QA 走查帧 + 保存末帧作为下一幕锚点  │
-      └──────────────────────────────┬──────────────────────────────┘
-                                     │
-                                     ▼
-      ┌─────────────────────────────────────────────────────────────┐
-      │  Stage 5: 全片大汇编与智能混音 (Master Assembly)            │
-      │  - 无损拼接全片 + BGM 侧链动态闪避 (开讲降至12%, 停顿回弹至25%)│
-      │  - 输出 1080P/30fps 广播级成品 MP4（剪映工程需另走 ChatCut MCP）│
-      └─────────────────────────────────────────────────────────────┘
-```
 
 ---
 
-## ⚡ 极速上手 (Quick Start)
+## ⚡ 极速上手 (5-Minute Quickstart)
 
 ### 1. 环境准备
 ```bash
-# 克隆本仓库
+# 克隆仓库并安装 Python 依赖
 git clone https://github.com/Bruceqiu67/human-ai-video-director.git
 cd human-ai-video-director
-
-# 安装 Python 依赖
 pip install -r requirements.txt
 
-# 确保系统已安装 FFmpeg 并且在 PATH 环境变量中可用
+# 验证 FFmpeg 可用性
 ffmpeg -version
 ```
 
-### 2. 初始化新项目
+### 2. 初始化项目脚手架
 ```bash
-# 一键生成标准脚手架与分镜剧本模板
+# 一键生成标准分镜剧本模板
 python -m studio init my_project
 ```
+*根据构想修改 `my_project/storyboard.yaml` 中的台词、风格与音色（或交由 Agent 导演问诊全自动生成）。*
 
 ### 3. 一键构建声音母带与时间戳清单
 ```bash
-# 自动生成各幕母带 WAV 与毫秒级时间戳 manifest
+# 自动生成自然恒定语速配音与毫秒级时间戳
 python -m studio audio build --project my_project
 ```
 
-### 4. 导出大模型提示词矩阵与生视频运镜指令
+### 4. 导出大模型同底画卷与生视频专业运镜指令
 ```bash
-# 自动导出 MASTER_PROMPTS.md（同底画卷生图）与 CINEMATIC_VIDEO_PROMPTS.md（专业运镜生视频）
+# 一键导出生图画卷矩阵与电影级生视频运镜提示词
 python -m studio prompt generate --project my_project
 ```
-- **生图画卷**：将生成的原画放入 `my_project/assets/masterframes/` 目录；
-- **生视频外溢**：直接复制 `CINEMATIC_VIDEO_PROMPTS.md` 中的工业级运镜指令（含可灵/Runway/Luma专属格式），将首帧原画丢入 AI 视频平台让视频彻底活过来！
+- **生图画卷**：复制 `MASTER_PROMPTS.md` 指令至 Midjourney / Grok / Flux 出图，存入 `my_project/assets/masterframes/`；
+- **生视频外溢**：复制 `CINEMATIC_VIDEO_PROMPTS.md` 中的运镜指令，在可灵 (Kling) / Runway 输入首帧原画生成流体级运镜大片。
 
-### 5. 用户自带素材自动接管 (User Assets Ingestion)
-如果已有部分物料，直接存入对应目录，系统自动智能接管分流：
-- **产品透明底 PNG / LOGO**：放入 `assets/user_assets/`（大模型生图垫图保持 100% 真实，或由引擎直接排版贴图）；
-- **已有成套原画 / 海报**：放入 `assets/masterframes/`（直接跳过第 4 步 AI 生图，免除重绘成本）；
-- **真人口播原声录音**：放入 `assets/audio/`（跳过 Edge-TTS，由 Whisper 毫秒时间戳驱动画面）；
-- **专属 BGM 音轨**：放入 `assets/bgm/`（跳过 BGM 推荐，直接应用动态侧链避让混音）。
-
-### 6. 单幕渲染与 QA 走查
+### 5. 场景隔离渲染与 QA 关键帧走查
 ```bash
-# 独立渲染第一幕成片并自动提取关键帧走查
+# 渲染第一幕（或使用 --all 渲染全部）
 python -m studio render --project my_project --scene 1
 ```
+*自动在 `my_project/output/qa_frames/` 生成走查帧，肉眼复核无重影、文字锐利后即可推进。*
 
-### 7. 全片无缝拼接与 BGM 动态闪避混音
+### 6. 全片大汇编与 BGM 动态侧链避让混音
 ```bash
-# 自动汇聚所有验收通过的分幕成片，应用侧链压缩混音
+# 挑选喜欢的 BGM 存入 assets/bgm/，执行一行命令总装
 python -m studio assemble --project my_project
+```
+*成品视频立即交付至 `my_project/output/video/my_project_1080P_Final.mp4`！*
+
+---
+
+## 📁 规范项目工程目录树 (Repository Layout)
+
+```text
+human-ai-video-director/
+├── .gemini/skills/human-ai-video-director/   # Agent 核心 Skill (含交互式引导与全流程向导)
+├── studio/                                  # 核心 Python 工业级引擎
+│   ├── assembly/                            # 无损直拼与侧链闪避混音 (FFmpeg Sidechain)
+│   ├── audio/                               # Edge-TTS、静音剪切与时间戳对齐
+│   ├── core/                                # 配置解析、数据单真理源与子进程通信
+│   ├── engine/                              # 5层定格渲染、2.5D翻书、自适应字幕与动效
+│   ├── prompt/                              # 同底画卷矩阵与电影级生视频运镜生成器
+│   └── styles/                              # 视觉美学解耦系统 (Modern Tech / Journal)
+├── templates/default_project/               # 标准脚手架模板
+├── video_tools_ecosystem/                    # 完整周边视频军火库 (剪映 MCP + 8大Skills)
+├── projects/                                # 你的专属实战工程目录
+│   └── <project_name>/
+│       ├── assets/
+│       │   ├── user_assets/                 # 用户自带物料 (产品 PNG / LOGO)
+│       │   ├── masterframes/                # 各分镜母版原画 (命名: Scene01_pose_1.jpg)
+│       │   ├── anchors/                     # 场景转场末帧锚点
+│       │   └── bgm/                         # 专属背景音乐 (如: pop_beat.mp3)
+│       ├── audio/                           # 声音母带与 timestamps_manifest.json
+│       ├── output/
+│       │   ├── video/                       # 各幕单片与最终 1080P_Final.mp4
+│       │   └── qa_frames/                   # 各幕走查关键帧
+│       ├── storyboard.yaml                  # 项目单一真理源配置文件
+│       ├── MASTER_PROMPTS.md                # 大模型同底画卷生图矩阵
+│       └── CINEMATIC_VIDEO_PROMPTS.md       # 大模型图生视频/文生视频专业运镜指令
+├── tests/                                   # 契约测试与冒烟测试 (100% 通过验证)
+├── requirements.txt                         # 核心依赖清单
+└── README.md                                # 项目主页
 ```
 
 ---
 
 ## 🧰 视频制作工具箱生态 (`video_tools_ecosystem/`)
 
-本项目打包了完整的周边开源视频创作军火库，位于 `video_tools_ecosystem/` 目录：
+本项目打包了顶尖的周边开源视频创作工具箱：
 
 | 工具/技能名称 | 原开源项目仓库链接 | 核心特色与适用场景 |
 | :--- | :--- | :--- |
 | **`mcp_chatcut_desktop`** | 内置 MCP 协议中枢 | **剪映 / CapCut 桌面端自动化**：60 个原子工具直接操控本地剪辑轨道 |
-| **`srt-whiteboard-animation`** | [geeklee/srt-whiteboard-animation](https://github.com/geeklee/srt-whiteboard-animation) | **暖白纸流墨手绘白板动画**：仿真实体笔触与知识点手绘涂鸦 |
+| **`srt-whiteboard-animation`** | [geeklee/srt-whiteboard-animation](https://github.com/geeklee/srt-whiteboard-animation) | **暖白纸流墨手绘白板动画**：仿真实体笔触与手绘涂鸦 |
 | **`anything2explainer`** | [Vincentwei1021/anything2explainer](https://github.com/Vincentwei1021/anything2explainer) | **黑底极简科技感讲解视频**：图灵宇宙风格，硬核算法与代码讲解 |
 | **`video-shotcraft`** | [Vincentwei1021/video-shotcraft](https://github.com/Vincentwei1021/video-shotcraft) | **157+ 镜头配方卡与 2.5D 动效分镜工坊**：Remotion 视觉动效全家桶 |
 | **`stickman-video-director`** | [kaomei/stickman-video-director](https://github.com/kaomei/stickman-video-director) | **火柴人叙事视频导演**：极低美术成本的幽默故事科普 |
@@ -143,55 +223,17 @@ python -m studio assemble --project my_project
 
 ---
 
-## ⚡ HyperFrames 代码动效集成
-
-当项目需要 WebGL、3D 手机壳悬浮翻转或复杂交互录屏动效时，可无缝结合 **HyperFrames**：
-
-```bash
-# 全局安装 HyperFrames CLI
-npm install -g hyperframes
-
-# 语法合规检查
-npx hyperframes check ./my_hyperframes_project
-
-# 交互式时间轴预览
-npx hyperframes preview ./my_hyperframes_project
-
-# 高保真导出
-npx hyperframes render ./my_hyperframes_project -o ./output/video.mp4
-```
-
----
-
 ## 🛑 六大不可逾越工程红线 (The 6 Non-Negotiables)
 
-1. **【绝不擅自合并总片】**：单幕必须独立交付，经 QA 抽帧验收满意后方可推进下一幕。
-2. **【绝不逐句强行变速】**：严禁在单句上使用 `atempo` 强拉硬拽，声音自然流淌，画面适配声音。
-3. **【绝不切文字区做羽化】**：严禁在带有文字、卡片的区域做代码羽化拼合，100% 同底整页直出。
-4. **【绝不添加代码正弦微晃】**：严禁人物正弦晃动、骨骼扭动，坚守实体定格抽帧瞬切（Jump Cut）。
-5. **【字音毫秒同源绝对对应】**：字幕文本与配音文本单一真理源，由配音实际波形起止点驱动。
-6. **【必须输出 QA 关键帧走查】**：自动抽取动作切换点与转场帧，肉眼复核无重影后方可汇报交付。
-
----
-
-## 📁 目录规范 (Repository Layout)
-
-```text
-human-ai-video-director/
-├── .gemini/skills/human-ai-video-director/   # Agent 核心 Skill (含全流程向导)
-├── studio/                                  # 核心 Python 模块化流水线引擎
-├── video_tools_ecosystem/                    # 全套视频制作工具箱生态 (MCP + 8大Skills)
-├── templates/default_project/               # 标准空白脚手架模版
-├── examples/                                # 纯文本实战案例模板 (零大文件)
-├── docs/                                    # 开发者与使用手册（含全量审查报告）
-├── tests/                                   # 冒烟测试与流水线契约测试
-├── requirements.txt                         # 依赖清册
-├── .gitignore                               # 物理级隔离私有音视频大文件
-└── README.md                                # 项目主页
-```
+1. **【绝不擅自合并总片】**：单幕必须隔离渲染，经 QA 抽帧走查满意后方可总汇编。
+2. **【绝不逐句强行变速】**：严禁在单句上滥用 `atempo` 强拉硬拽，声音自然流淌，画面绝对服从声音。
+3. **【绝不切文字区做羽化】**：严禁在带有文字、卡片的区域做代码 Alpha 羽化拼合，100% 同底整页直出。
+4. **【绝不添加代码正弦微晃】**：严禁人物正弦摆动、骨骼扭动，坚守实体定格瞬切（Jump Cut）或物理翻书。
+5. **【字音毫秒同源绝对对应】**：字幕文本与配音文本单一数据源，字幕起止由真实声波波形严格驱动。
+6. **【必须输出 QA 关键帧走查】**：自动抽取动作切换点与转场帧，肉眼复核文字锐度与构图后方可汇报交付。
 
 ---
 
 ## 📄 开源许可证 (License)
 
-本项目遵循 [MIT License](LICENSE) 协议开源。
+本项目遵循 [MIT License](LICENSE) 协议开源。欢迎提交 Issue 与 Pull Request！
