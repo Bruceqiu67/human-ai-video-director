@@ -135,59 +135,154 @@ flowchart TD
 
 ---
 
-## ⚡ 极速上手 (5-Minute Quickstart)
+## 🚀 导演级完整实战工作流程详解 (The Complete Human-AI Director Protocol)
 
-### 1. 环境准备
-```bash
-# 克隆仓库并安装 Python 依赖
-git clone https://github.com/Bruceqiu67/human-ai-video-director.git
-cd human-ai-video-director
-pip install -r requirements.txt
+当启动短视频创作时，工坊严格遵循**人机协同 8 步工业化规约**推进，既保持极简高效，又确保分秒不差的工程确定性：
 
-# 验证 FFmpeg 可用性
-ffmpeg -version
+```mermaid
+flowchart LR
+    S0["第 0 步<br/>素材盘点接管"] --> S1["第 1 步<br/>导演创意问诊"]
+    S1 --> S2["第 2 步<br/>剧本定制与拍板门禁"]
+    S2 --> S3["第 3 步<br/>声音工程时间锁死"]
+    S3 --> S4["第 4 步<br/>同底画卷生图"]
+    S4 --> S5["第 5 步<br/>隔离渲染走查"]
+    S5 --> S6["第 6 步<br/>BGM与侧链总装"]
+    S6 --> S7["第 7 步<br/>成片验收问诊"]
+    S7 --> S8["第 8 步<br/>电影级运镜SOP与AI回流"]
 ```
 
-### 2. 初始化项目脚手架
-```bash
-# 一键生成标准分镜剧本模板
-python -m studio init my_project
-```
-*根据构想修改 `my_project/storyboard.yaml` 中的台词、风格与音色（或交由 Agent 导演问诊全自动生成）。*
+---
 
-### 3. 一键构建声音母带与时间戳清单
-```bash
-# 自动生成自然恒定语速配音与毫秒级时间戳
-python -m studio audio build --project my_project
-```
+### 🎬 第 0 步：已有素材盘点与零摩擦自动接管 (Zero-Friction Asset Ingestion)
+在开案之初，Agent 主动探询手头已有物料，流水线自动识别并跳过不必要的大模型生成，实现零重复成本：
+- **产品透明底 PNG / 矢量 LOGO**：放入 `assets/user_assets/`（由 `PromptBuilder` 自动将路径注入提示词作为 ControlNet / `--cref` 垫图，锁定 100% 品牌细节）；
+- **已有成套分镜 / 原画海报**：放入 `assets/masterframes/`（**直接跳过第 4 步 AI 生图**，直通渲染引擎）；
+- **真人口播录音 / 现成音频**：放入 `assets/audio/`（由 `AudioBuilder` 自动识别并跳过 Edge-TTS，执行静音切除并由真实声波时间戳驱动全片）；
+- **专属定制 BGM**：放入 `assets/bgm/`（跳过 BGM 挑选，直接应用广播级侧链动态避让混音）。
 
-### 4. 导出大模型同底画卷生图矩阵
-```bash
-# 一键导出生图画卷矩阵
-python -m studio prompt generate --project my_project
-```
-*复制 `MASTER_PROMPTS.md` 指令至 Midjourney / Grok / Flux 出图，存入 `my_project/assets/masterframes/`。*
+---
 
-### 5. 场景隔离渲染与 QA 关键帧走查
-```bash
-# 渲染第一幕（或使用 --all 渲染全部）
-python -m studio render --project my_project --scene 1
-```
-*自动在 `my_project/output/qa_frames/` 生成走查帧，肉眼复核无重影、文字锐利后即可推进。*
+### 📋 第 1 步：导演前置创意问诊 (Director's Creative Intake)
+Agent 严格扮演“专业 AI 视频总导演”，主动抛出 6 个维度的结构化创意问诊表单：
+1. **【用途与受众】**：电商带货种草 / 软件功能官宣 / 行业干货拆解 / 自由输入具体场景；
+2. **【时长与幕数节奏】**：
+   - 10s ~ 15s 极速微短片 / 卡点爆款（2 ~ 3 幕）
+   - 30s ~ 45s 中短视频 / 功能拆解（3 ~ 4 幕）
+   - 50s ~ 65s 深度干货 / 标杆大片（黄金 5 幕）
+   - 自由指定特定时长与幕数
+3. **【视觉美学与调性】**：
+   - 现代科技 SaaS 风 (`modern_tech`，深空蓝黑底、霓虹蓝、半透明玻璃拟态胶囊字幕)
+   - 经典杂志手账折页风 (`journal_scrapbook`，暖米白纸底、书脊折痕、思源粗黑排版、荧光笔)
+   - 3D 萌系黏土桌宠风 (`clay_3d`，高亲和力实体感、微距景深、暖光摄影)
+   - 极简黑白高级商务风 (`minimal_black`，高反差黑白、包豪斯排版)
+   - **Option E 自由定制风格**：赛博朋克、复古胶片、日系极简暖阳、手绘插画涂鸦等
+4. **【转场方式与画面主体】**：
+   - 转场：纯硬切 Jump Cut / 2.5D 物理翻书折页 / 自由定制（快门闪白、推焦冲屏等）
+   - 主体：纯产品特写 / 真人肖像 / 3D 吉祥物 / 爆炸拆解图 / 悬浮 UI
+5. **【声音与音乐偏好】**：
+   - 微软神经网络音色：阳光青年男声 (`Yunxi`) / 专家沉稳男声 (`Yunjian`) / 温暖知性女声 (`Xiaoxiao`) / 自由指定
+   - BGM 期望风格：轻松俏皮 Pop / 科技律动 Future Bass / 治愈暖调 Lo-Fi / 自由指定
+6. **【周边军火库联动 (可选进阶)】**：
+   - 可选联动白板手绘、科技代码讲解、157+镜头配方、火柴人、真人口播画中画或 3D WebGL 动效。
 
-### 6. 全片大汇编与 BGM 动态侧链避让混音
-```bash
-# 挑选喜欢的 BGM 存入 assets/bgm/，执行一行命令总装
-python -m studio assemble --project my_project
-```
-*成品视频立即交付至 `my_project/output/video/my_project_1080P_Final.mp4`！*
+---
 
-### 7. 电影级 AI 运镜与生视频升维 (可选进阶)
-成片验收满意后，可唤醒生视频升级：
-1. 告知 Agent 你所使用的 AI 视频平台（可灵/Runway/Luma/海螺/即梦/自由指定）；
-2. 获取定制的 `CINEMATIC_VIDEO_PROMPTS.md` 实战任务卡；
-3. 将生成的外部视频片段存入 `my_project/assets/raw_video/`；
-4. 重新执行 `python -m studio assemble --project my_project`，秒级完成声画无缝总装！
+### 📝 第 2 步：剧本定制与严格拍板门禁 (Dynamic Scripting & Strict Sign-Off Gate)
+- **剧本创作规约**：根据问诊结果定制对白台词（每句建议 10~22 字，留足自然呼吸气口）；
+- **动作密度与同机位连环画铁律**：
+  - **动作密度底线**：单幕时长 $\ge 2.5\text{s}$ 时，必须规划至少 2~3 个连贯微动作姿态（每个切片控制在 $1.2\text{s} \sim 1.8\text{s}$，严禁单张死图硬撑 3 秒以上）；
+  - **三脚架机位锁死**：同一幕内的所有姿态，必须保持 100% 同一摄像机焦距、同一背景环境与同一主体屏幕坐标 $(x, y)$；
+  - **纯增量姿态演进 (Delta Pose Shift)**：大模型只更新表情与微肢体动作，严禁同幕内随意更换背景与道具；
+- **🛑 严格拍板门禁 (Proposal Gate - 严禁偷跑)**：
+  - 向用户清晰呈递分镜剧本与方案后，**必须强制就地停步等待**；
+  - **红线底线：在用户没有明确给出肯定答复、正式拍板确认开始执行（如明确回复“开始”、“执行”、“确认方案”、“选方案A”等）之前，绝对不允许执行方案生成视频，严禁调用任何引擎命令或直接生成媒体资产**；
+  - 获得用户明确授权后，执行初始化并写入单一真理源：
+    ```bash
+    python -m studio init my_project
+    ```
+
+---
+
+### 🎙️ 第 3 步：广播级声音工程与时间锁死 (Audio-First Engineering)
+- **声音即时间轴 (Audio-First)**：全片时长由真实语音起止波形唯一决定，绝不通过 `atempo` 橡皮筋强行变速拉伸；
+- **执行命令**：
+  ```bash
+  python -m studio audio build --project my_project
+  ```
+- **技术要点**：
+  - 微软神经网络音色恒定自然语速直出（默认 `rate=+20%`）；
+  - 自动通过 FFmpeg 去除头尾微秒静音，补齐自然停顿留白；
+  - 若 `assets/audio/` 存在用户真人录音，自动接管并跳过 TTS；
+  - 生成全片毫秒级单一真理源：`timestamps_manifest.json`。
+
+---
+
+### 🎨 第 4 步：同底提示词矩阵生图 (Masterframe Prompts Generation)
+- **执行命令**：
+  ```bash
+  python -m studio prompt generate --project my_project
+  ```
+- **技术要点**：
+  - 输出标准化大模型提示词矩阵 `MASTER_PROMPTS.md`；
+  - 包含同机位三脚架绝对锁死指令、背景与标题字样锁定、用户自有素材（`assets/user_assets/`）垫图提示；
+  - 指引用户在 Midjourney（`Vary Region` 局部重绘）、Grok 或 Flux（Denoise 0.35~0.45 图生图）以极低成本出图；
+  - 出图命名为 `Scene01_pose_1.jpg`、`Scene01_pose_2.jpg`，放入 `assets/masterframes/`。
+
+---
+
+### 🎬 第 5 步：单幕隔离渲染与 QA 关键帧走查 (Scene Gating & Anchoring)
+- **执行命令**：
+  ```bash
+  # 隔离精调单幕（或添加 --all 全量渲染）
+  python -m studio render --project my_project --scene 1
+  ```
+- **技术要点**：
+  - **定格动能微弹冲 (Stop-Motion Bounce)**：每个微姿态跳切瞬间自动施加 0.16s 阻尼正弦弹冲（Scale Punch 1.024x），彻底消除幻灯片死寂感；
+  - **亚像素级无缝镜头推进**：单通道合并 Ken Burns 缓推与定格弹冲，画面始终保持极致锐利；
+  - **自适应胶囊字幕**：根据文字长度自适应居中排版，彻底消除文字溢出；
+  - **QA 关键帧自动抽检**：自动在 `output/qa_frames/` 提取动作切换点与转场关键帧，肉眼复核满意后方可推进。
+
+---
+
+### 🎚️ 第 6 步：BGM 选型推荐与动态侧链汇流 (BGM Matching & Ducking Assembly)
+- **导演动作**：总导演根据视频调性提供精准的 BGM 选型画像（风格、BPM 节拍、检索关键词），用户挑选中意音轨存入 `assets/bgm/`；
+- **执行命令**：
+  ```bash
+  python -m studio assemble --project my_project
+  ```
+- **技术要点**：
+  - 各幕视频无损拼接（严格使用 UTF-8 无 BOM 安全格式）；
+  - **广播级动态侧链闪避混音 (Sidechain Ducking)**：人声朗读时 BGM 自动平滑压低至 `12%`，停顿气口回弹至 `25%`；
+  - 立即在 `output/video/my_project_1080P_Final.mp4` 交付 1080P/30fps 广播级高清零水印成片！
+
+---
+
+### 🚀 第 7 步：成片验收与 AI 视频平台后置问诊 (Post-Render Platform Inquiry)
+- **导演动作**：
+  1. 呈递刚刚生成的 1080P 本地精良成片（声画对齐、字幕排版与侧链混音完整就绪）；
+  2. 主动探询用户：“当前定格短片已完成！如果希望将画面升级为具有电影级推拉摇移、微距光影流动的大片，我们现在可以开启【电影级 AI 运镜与生视频升维】”；
+  3. 开放问询用户所偏好的目标平台：
+     - **快手可灵 (Kling 3.0)**（推荐 5s/10s，首尾帧过渡模式，运镜控制/运动笔刷）
+     - **Runway Gen-3 (Alpha / Turbo)**（推荐 5s，Camera Control 六轴运镜滑块与首尾帧过渡）
+     - **Luma Dream Machine**（推荐 5s，自然语言运镜控制，支持 Extend 延长）
+     - **海螺 AI (Minimax) / 字节即梦 (Jimeng)**（推荐 5s/6s，高物理动态）
+     - **自由定制其他平台**（Sora、Pika、腾讯混元等，根据平台特性动态生成专属规则）
+
+---
+
+### 🎥 第 8 步：电影级 AI 生视频实操 SOP 全案与智能回流总装 (Cinematic SOP & Round-trip Assembly)
+- **SOP 任务卡交付**：生成针对所选平台的工业化落地全案 `CINEMATIC_VIDEO_PROMPTS.md`：
+  - **长视频智能切片**：全片自动拆解为 3~5 秒独立微镜头，天然吻合各平台 5s 生成窗口；
+  - **首尾双锚点接力 (First-End Relay)**：首帧上传母版图（`assets/masterframes/`），尾帧上传转场锚点（`assets/anchors/`）或下一镜头首图，双端定界根除变形；
+  - **Camera First 与 One-Move Rule**：运镜轨迹与主体动作解耦，运动幅度锁定在 `3~4`（防融化）；
+  - **反向负面词重装甲**：逐分镜提供正反双轨提示词，一键复制；
+- **外部视频本地智能总装回流**：
+  - 外部平台生成完成后，将视频存入 `assets/raw_video/`（多姿态自动命名为 `scene_01_p01.mp4`, `scene_01_p02.mp4`）；
+  - 重新执行：
+    ```bash
+    python -m studio assemble --project my_project
+    ```
+  - **`AIConformer` 毫秒级保障**：自动检索分段切片并按序拼接，强制统一归一化转码至 1080×1920、`setsar=1`、30fps，以本地母带音频为绝对真理源（`-t {audio_dur}`），画面不足自动克隆末帧延展，**100% 保证人声不被截断，零黑屏零卡顿**，完成大片交付！
 
 ---
 
@@ -227,21 +322,110 @@ human-ai-video-director/
 
 ---
 
-## 🧰 视频制作工具箱生态 (`video_tools_ecosystem/`)
+## 🧰 视频制作工具箱生态矩阵与效果画廊 (`video_tools_ecosystem/`)
 
-本项目打包了顶尖的周边开源视频创作工具箱：
+工坊不仅自带高精度定格与 AI 运镜引擎，还在 `video_tools_ecosystem/` 完整打包了周边顶尖开源视频制作武器库。每个 Skill 均配有**真实视觉效果图/动图**与最佳适用场景，一目了然：
 
-| 工具/技能名称 | 原开源项目仓库链接 | 核心特色与适用场景 |
-| :--- | :--- | :--- |
-| **`mcp_chatcut_desktop`** | 内置 MCP 协议中枢 | **剪映 / CapCut 桌面端自动化**：60 个原子工具直接操控本地剪辑轨道 |
-| **`srt-whiteboard-animation`** | [geeklee/srt-whiteboard-animation](https://github.com/geeklee/srt-whiteboard-animation) | **暖白纸流墨手绘白板动画**：仿真实体笔触与手绘涂鸦 |
-| **`anything2explainer`** | [Vincentwei1021/anything2explainer](https://github.com/Vincentwei1021/anything2explainer) | **黑底极简科技感讲解视频**：图灵宇宙风格，硬核算法与代码讲解 |
-| **`video-shotcraft`** | [Vincentwei1021/video-shotcraft](https://github.com/Vincentwei1021/video-shotcraft) | **157+ 镜头配方卡与 2.5D 动效分镜工坊**：Remotion 视觉动效全家桶 |
-| **`stickman-video-director`** | [kaomei/stickman-video-director](https://github.com/kaomei/stickman-video-director) | **火柴人叙事视频导演**：极低美术成本的幽默故事科普 |
-| **`hand-drawn-video-prompts`** | [kaomei/hand-drawn-video-prompts](https://github.com/kaomei/hand-drawn-video-prompts) | **暖白底 Q 版蜡笔手绘 9:16 分镜**：高亲和力生活与职场指南 |
-| **`cut-director`** | 内置实用 Skill | **口播切气口与画中画视觉导演**：真人视频智能切除停顿并弹出产品 UI |
-| **`ffmpeg-video-editor`** | 内置实用 Skill | **FFmpeg 命令行高保真剪切转码工具** |
-| **`yh-tools-video2srt`** | 内置实用 Skill | **离线/在线智能音视频提取字幕与时间戳** |
+| 工具/技能名称 | 开源项目 / 归属 | 核心视觉特征 | 效果图直观预览 |
+| :--- | :--- | :--- | :---: |
+| **`srt-whiteboard-animation`** | [geeklee](https://github.com/geeklee/srt-whiteboard-animation) | 暖白纸底、笔尖流式连续落墨、字幕事件驱动手绘 | [查看动图](#1-暖白纸流墨手绘白板动画-srt-whiteboard-animation) |
+| **`anything2explainer`** | [Vincentwei1021](https://github.com/Vincentwei1021/anything2explainer) | 图灵黑底、星空点阵微光、紫色高反差、Remotion 纯代码 | [查看走查图](#2-黑底极简硬核科技讲解视频-anything2explainer) |
+| **`video-shotcraft`** | [Vincentwei1021](https://github.com/Vincentwei1021/video-shotcraft) | 157+ 工业级镜头配方、3D 旋转木马、卡片堆叠装配 | [查看图谱](#3-157-镜头配方卡与-25d-动效分镜工坊-video-shotcraft) |
+| **`stickman-video-director`** | [kaomei](https://github.com/kaomei/stickman-video-director) | 现代冷帽火柴人 (Beanie Zeke)、纯白极简网格、丝滑 2D 动效 | [查看动图](#4-现代潮酷火柴人叙事视频导演-stickman-video-director) |
+| **`hand-drawn-video-prompts`** | [kaomei](https://github.com/kaomei/hand-drawn-video-prompts) | Q 版粗黑蜡笔手绘、暖白底纸、手绘关键词内嵌、名人 Q 版化 | [查看动图](#5-q-版蜡笔手绘生活与商业短视频-hand-drawn-video-prompts) |
+| **`cut-director`** | 内置实用 Skill | 真人口播智能切除气口停顿、产品 UI 画中画 (PIP) 弹窗 | [查看构图图谱](#6-真人口播切气口与画中画视觉导演-cut-director) |
+| **`mcp_chatcut_desktop`** | 内置 MCP 协议中枢 | 剪映 / CapCut 桌面端 60 个原子工具无头直接操控本地轨道 | [查看能力介绍](#7-剪映--capcut-桌面端自动化-mcp-中枢-mcp_chatcut_desktop) |
+| **`HyperFrames`** | Node.js / WebGL | 手机 360° 悬浮旋转、复杂产品爆炸图视差、交互录屏渲染 | [查看能力介绍](#8-webgl-3d-悬浮与代码动效引擎-hyperframes) |
+
+---
+
+### 1. 暖白纸流墨手绘白板动画 (`srt-whiteboard-animation`)
+- **开源仓库**：[geeklee/srt-whiteboard-animation](https://github.com/geeklee/srt-whiteboard-animation)
+- **视觉风格**：暖米黄实体底纸 (`#F5EBD7`)、深灰色素描线条、笔尖连续流式落墨手绘、字幕事件精准驱动出场。
+- **最佳场景**：知识科普、故事口播、拆解型课程短视频。
+- **实测视觉效果**：
+
+<div align="center">
+  <img src="docs/assets/ecosystem/whiteboard-demo.gif" alt="SRT 白板手绘动画实测效果" width="620">
+  <p><em>▲ 猴子山抢香蕉：流式笔迹手绘动画效果（暖纸底色 + 动态落墨）</em></p>
+</div>
+
+---
+
+### 2. 黑底极简硬核科技讲解视频 (`anything2explainer`)
+- **开源仓库**：[Vincentwei1021/anything2explainer](https://github.com/Vincentwei1021/anything2explainer)
+- **视觉风格**：图灵宇宙深空黑底、星空/点阵波纹微光背板、高对比度白色线框与高饱和强调色、Remotion 纯代码亚像素级高保真渲染。
+- **最佳场景**：AI 算法论文解读、硬核架构拆解、开发者技术官宣。
+- **实测视觉效果**：
+
+<div align="center">
+  <img src="docs/assets/ecosystem/anything2explainer-contrast.jpg" alt="anything2explainer 黑底极简科技感对比走查" width="620">
+  <p><em>▲ RAG 知识库硬核解说：极简高反差排版与关键数据可视化走查帧</em></p>
+</div>
+
+---
+
+### 3. 157+ 镜头配方卡与 2.5D 动效分镜工坊 (`video-shotcraft`)
+- **开源仓库**：[Vincentwei1021/video-shotcraft](https://github.com/Vincentwei1021/video-shotcraft)
+- **视觉风格**：Remotion 视觉动效全家桶，内置 157+ 工业级镜头配方（3D 旋转木马、卡片层叠推进、多轴分屏、渐进式装配、极光扫光）。
+- **最佳场景**：高品质商业产品宣传片、SaaS 功能演示、多机位动态转场。
+- **实测视觉效果**：
+
+<div align="center">
+  <img src="docs/assets/ecosystem/shotcraft-gallery.jpg" alt="video-shotcraft 157+ 镜头配方卡画廊" width="620">
+  <p><em>▲ 157+ 镜头视觉动效库总览（卡片堆叠、3D 空间、渐进装配）</em></p>
+</div>
+
+---
+
+### 4. 现代潮酷火柴人叙事视频导演 (`stickman-video-director`)
+- **开源仓库**：[kaomei/stickman-video-director](https://github.com/kaomei/stickman-video-director)
+- **视觉风格**：现代红冷帽火柴人 (Beanie Zeke)，纯白高光空间 + 极淡透视网格 + 悬浮青蓝半透明玻璃 UI，彻底消除肢体抽搐与五官异化。
+- **最佳场景**：搞笑短剧、职场嘴替、生活哲学科普、低美术成本快速出片。
+- **实测视觉效果**：
+
+<div align="center">
+  <img src="docs/assets/ecosystem/stickman-demo.gif" alt="现代火柴人 2D 动效实测效果" width="580">
+  <p><em>▲ 风格 2A 极简科技潮酷火柴人：纯白网格背景 + 丝滑 2D 动作交互</em></p>
+</div>
+
+---
+
+### 5. Q 版蜡笔手绘生活与商业短视频 (`hand-drawn-video-prompts`)
+- **开源仓库**：[kaomei/hand-drawn-video-prompts](https://github.com/kaomei/hand-drawn-video-prompts)
+- **视觉风格**：`#F8F6EF` 暖白纸底色、自然粗黑蜡笔手绘线条、向日葵黄/钴蓝经典色块点缀、科技与商业名人 Q 版化（老黄皮衣、马斯克等）。
+- **最佳场景**：商业观察、财经解说、小红书/抖音高亲和力种草。
+- **实测视觉效果**：
+
+<div align="center">
+  <img src="docs/assets/ecosystem/hand-drawn-demo.gif" alt="Q 版蜡笔手绘短视频实测效果" width="340">
+  <p><em>▲ 9:16 竖版 Q 版蜡笔手绘动效：内嵌手绘中文关键词与分镜节奏</em></p>
+</div>
+
+---
+
+### 6. 真人口播切气口与画中画视觉导演 (`cut-director`)
+- **内置 Skill**：`video_tools_ecosystem/companion_skills/cut-director/`
+- **视觉风格**：真人口播智能切气口，在语音停顿处自动插入产品特写、全屏高光卡片或悬浮画中画（PIP），规避口播沉闷感。
+- **最佳场景**：创始人口播视频、个人 IP 知识分享、带货产品画中画实操演示。
+- **实测视觉效果**：
+
+<div align="center">
+  <img src="docs/assets/ecosystem/cut-director-atlas.jpg" alt="cut-director 镜头构图与画中画图谱" width="620">
+  <p><em>▲ 真人口播智能画中画弹窗构图图谱与安全区排版规范</em></p>
+</div>
+
+---
+
+### 7. 剪映 / CapCut 桌面端自动化 MCP 中枢 (`mcp_chatcut_desktop`)
+- **内置 MCP 服务**：`video_tools_ecosystem/mcp_chatcut_desktop/`
+- **核心能力**：提供 60 个原子级工具，无头直接操控本地剪映/CapCut 桌面端，直接创建轨道、插入音视频素材、添加花字与转场贴纸，打通 AI 与专业剪辑软件的最后一公里。
+
+---
+
+### 8. WebGL 3D 悬浮与代码动效引擎 (`HyperFrames`)
+- **官方工具**：基于 Node.js / Web 渲染生态（`npm install -g hyperframes`）
+- **核心能力**：3D 手机 360° 悬浮旋转、复杂产品爆炸图视差展示、前端交互录屏 60fps 高保真无头渲染，完美融入主片。
 
 ---
 
