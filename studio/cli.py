@@ -8,6 +8,7 @@ import os
 import shutil
 import sys
 
+from studio.assembly.ai_conformer import AIConformer
 from studio.assembly.concatenator import SceneConcatenator
 from studio.assembly.ducking_mixer import DuckingMixer
 from studio.audio.audio_builder import AudioBuilder
@@ -198,26 +199,43 @@ def cmd_assemble(args) -> None:
         mp4_path = os.path.join(video_dir, f"{sc_id}.mp4")
 
         # Check for AI-generated video in assets/raw_video/
-        raw_candidates = [
-            os.path.join(raw_video_dir, f"{sc_id}.mp4"),
-            os.path.join(raw_video_dir, f"{sc_id}_ai.mp4"),
-        ]
-        found_raw = next((p for p in raw_candidates if os.path.isfile(p)), None)
-        if found_raw:
-            master_audio = os.path.join(project_dir, "audio", f"{sc_id}_master.wav")
-            if os.path.exists(master_audio):
-                print(f"✓ Found external AI video for {sc_id} ({os.path.basename(found_raw)}). Remuxing with master voiceover...")
-                os.makedirs(video_dir, exist_ok=True)
-                remux_cmd = [
-                    "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
-                    "-i", found_raw,
-                    "-i", master_audio,
-                    "-c:v", "copy",
-                    "-c:a", "aac",
-                    "-shortest",
-                    mp4_path,
+        # 1. Multi-pose clips: scene_01_p*.mp4 / scene_01_p*.mov
+        # 2. Single clip: scene_01.mp4 / scene_01_ai.mp4 / scene_01.mov
+        found_clips: list[str] = []
+        if os.path.isdir(raw_video_dir):
+            import glob
+            pose_patterns = [
+                os.path.join(raw_video_dir, f"{sc_id}_p*.mp4"),
+                os.path.join(raw_video_dir, f"{sc_id}_p*.mov"),
+            ]
+            matched_poses: list[str] = []
+            for pat in pose_patterns:
+                matched_poses.extend(glob.glob(pat))
+            if matched_poses:
+                matched_poses.sort()
+                found_clips = matched_poses
+            else:
+                raw_candidates = [
+                    os.path.join(raw_video_dir, f"{sc_id}.mp4"),
+                    os.path.join(raw_video_dir, f"{sc_id}_ai.mp4"),
+                    os.path.join(raw_video_dir, f"{sc_id}.mov"),
+                    os.path.join(raw_video_dir, f"{sc_id}_ai.mov"),
                 ]
-                run_command(remux_cmd)
+                found_raw = next((p for p in raw_candidates if os.path.isfile(p)), None)
+                if found_raw:
+                    found_clips = [found_raw]
+
+        if found_clips:
+            master_audio = os.path.join(project_dir, "audio", f"{sc_id}_master.wav")
+            audio_target = master_audio if os.path.isfile(master_audio) else None
+            clip_desc = f"{len(found_clips)} clip(s): {', '.join(os.path.basename(c) for c in found_clips)}"
+            print(f"✓ Found external AI video for {sc_id} ({clip_desc}). Conforming and locking to voiceover...")
+            os.makedirs(video_dir, exist_ok=True)
+            AIConformer.conform_and_remux(
+                video_clips=found_clips,
+                output_path=mp4_path,
+                master_audio=audio_target,
+            )
 
         if not os.path.exists(mp4_path):
             raise FileNotFoundError(

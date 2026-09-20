@@ -131,24 +131,24 @@ class CinematicPromptEngine:
             pose = seg.get("pose", "出镜演示")
             dur = seg.get("duration", 3.0)
 
-            # Target matching masterframe filename
+            # Target matching masterframe filename (project-relative)
             first_frame_name = f"Scene{scene_idx:02d}_pose_{p_idx}.jpg"
-            first_frame_path = os.path.join(
-                "projects", project_name, "assets", "masterframes", first_frame_name
-            ) if project_name else f"assets/masterframes/{first_frame_name}"
+            first_frame_path = f"assets/masterframes/{first_frame_name}"
 
-            # End frame anchor for scene
+            # End frame anchor for scene (project-relative)
             end_frame_name = f"scene_{scene_idx:02d}_end.png"
-            end_frame_path = os.path.join(
-                "projects", project_name, "assets", "anchors", end_frame_name
-            ) if project_name else f"assets/anchors/{end_frame_name}"
+            end_frame_path = f"assets/anchors/{end_frame_name}"
 
             # Next scene first frame for cross-scene transition
             next_scene_idx = scene_idx + 1 if scene_idx < total_scenes else None
             next_frame_name = f"Scene{next_scene_idx:02d}_pose_1.jpg" if next_scene_idx else ""
-            next_frame_path = os.path.join(
-                "projects", project_name, "assets", "masterframes", next_frame_name
-            ) if next_scene_idx and project_name else (f"assets/masterframes/{next_frame_name}" if next_scene_idx else "")
+            next_frame_path = f"assets/masterframes/{next_frame_name}" if next_scene_idx else ""
+
+            # Output filename for external AI video (multi-pose safe)
+            if len(segments) > 1:
+                output_ai_name = f"scene_{scene_idx:02d}_p{p_idx:02d}.mp4"
+            else:
+                output_ai_name = f"scene_{scene_idx:02d}.mp4"
 
             # Kling AI prompt format (Bilingual, camera-first)
             kling_prompt = (
@@ -180,6 +180,7 @@ class CinematicPromptEngine:
                 "dialogue": text,
                 "pose": pose,
                 "duration": f"{dur:.1f}s",
+                "dur_val": dur,
                 "first_frame_path": first_frame_path,
                 "first_frame_name": first_frame_name,
                 "end_frame_path": end_frame_path,
@@ -193,7 +194,7 @@ class CinematicPromptEngine:
                 "kling_negative": kling_negative,
                 "runway_prompt": runway_prompt,
                 "runway_negative": runway_negative,
-                "output_ai_name": f"scene_{scene_idx:02d}.mp4",
+                "output_ai_name": output_ai_name,
             })
 
         return results
@@ -260,9 +261,15 @@ class CinematicPromptEngine:
             lines.append("")
 
             for p in prompts:
+                dur_val = p.get("dur_val", 3.0)
+                if dur_val <= 5.0:
+                    dur_desc = f"`{p['duration']}`（建议平台选择 5s 档位；若外部视频短于旁白，assemble 将自适应延展末帧保证台词完整）"
+                else:
+                    dur_desc = f"`{p['duration']}`（单句时长超 5s，平台需选择 10s 档位或使用 Extend 功能延展）"
+
                 lines.append(f"#### 🎯 镜头 {idx}.{p['pose_idx']} 实战任务卡：{p['pose']}")
                 lines.append(f"- **台词旁白**：*{p['dialogue']}*")
-                lines.append(f"- **分镜时长**：`{p['duration']}`（对应平台 5s 档位）")
+                lines.append(f"- **分镜时长**：{dur_desc}")
                 lines.append("")
                 lines.append(f"**【第 1 步 · 首帧图片上传】**：")
                 lines.append(f"- 在平台选择【图生视频 (Image-to-Video)】模式；")
@@ -308,7 +315,7 @@ class CinematicPromptEngine:
 
                 lines.append(f"**【第 5 步 · 生成下载与本地回传】**：")
                 lines.append(f"- 平台生成完成后，点击下载 MP4；")
-                lines.append(f"- 将文件重命名并放入本项目目录：`projects/{project_name}/assets/raw_video/{p['output_ai_name']}`")
+                lines.append(f"- 将文件重命名并放入本项目目录：`assets/raw_video/{p['output_ai_name']}`")
                 lines.append("")
 
             lines.append("---")
@@ -317,17 +324,17 @@ class CinematicPromptEngine:
         lines.extend([
             "## 🚀 最终回流总装与交付 (Master Assembly & Final Delivery)",
             "",
-            f"当你在 AI 视频平台生成完全部分镜片段，并存入 `projects/{project_name}/assets/raw_video/` 后，回到终端执行：",
+            "当你在 AI 视频平台生成完全部分镜片段，并存入 `assets/raw_video/` 后，回到终端执行：",
             "",
             "```bash",
-            f"python -m studio assemble --project projects/{project_name}",
+            "python -m studio assemble",
             "```",
             "",
             "**工坊底层将全自动完成以下工序**：",
-            "1. **视频自动接管**：自动优先加载 `assets/raw_video/` 中的电影级 AI 动态视频片段；",
-            "2. **音画精确锁相**：将 AI 画面与本地打磨好的 **Edge-TTS / 真人声母带 WAV** 进行毫秒级对齐压制；",
+            "1. **视频自动接管**：自动优先加载 `assets/raw_video/` 中的电影级 AI 动态视频片段（支持单片段或多姿态分镜拼接）；",
+            "2. **音画精确锁相**：将 AI 画面与本地打磨好的 **Edge-TTS / 真人声母带 WAV** 进行毫秒级对齐压制，自适应延展末帧保证人声绝不被截断；",
             "3. **动态侧链混音**：施加广播级 Sidechain Ducking，人声开讲 BGM 自动压低至 12%，呼吸气口自然回弹至 25%；",
-            f"4. **交付最终大片**：在 `projects/{project_name}/output/video/{project_name}_1080P_Final.mp4` 输出无水印超清成片！",
+            f"4. **交付最终大片**：在 `output/video/{project_name}_1080P_Final.mp4` 输出无水印超清成片！",
             "",
         ])
 

@@ -66,6 +66,20 @@ class PromptBuilder:
             else:
                 lines.append(f"- Scene center / hero subject: {character}.")
             lines.append("")
+
+            user_assets_dir = os.path.join(self.project_dir, "assets", "user_assets")
+            if os.path.isdir(user_assets_dir):
+                user_asset_files = [
+                    f for f in sorted(os.listdir(user_assets_dir))
+                    if f.lower().endswith((".png", ".jpg", ".jpeg", ".webp", ".svg"))
+                ]
+                if user_asset_files:
+                    asset_list = ", ".join(f"`assets/user_assets/{f}`" for f in user_asset_files)
+                    lines.append("【User Assets & Brand Fidelity (垫图与物料注入)】:")
+                    lines.append(f"- Dedicated user assets detected: {asset_list}.")
+                    lines.append("- Upload these assets as image conditioning (--cref / --sref / ControlNet) to maintain exact 1:1 brand identity.")
+                    lines.append("")
+
             lines.append("【Character & Pose】:")
             lines.append(f"- {silhouette}")
             lines.append(f"- Initial Pose: {first_pose}.")

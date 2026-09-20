@@ -19,7 +19,12 @@ class StoryboardConfig:
             raise ValueError(f"Storyboard root must be a mapping, got {type(data).__name__}.")
         self.raw = data
         self.config_path = config_path
-        self.project_dir = os.path.dirname(config_path) if config_path else os.getcwd()
+        if config_path and os.path.isdir(config_path):
+            self.project_dir = os.path.abspath(config_path)
+        elif config_path:
+            self.project_dir = os.path.dirname(os.path.abspath(config_path))
+        else:
+            self.project_dir = os.getcwd()
 
         proj = data.get("project") or {}
         if not isinstance(proj, dict):

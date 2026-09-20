@@ -19,6 +19,7 @@ class AudioBuilder:
         self.project_dir = config.project_dir
         self.audio_dir = os.path.join(self.project_dir, "audio")
         self.raw_dir = os.path.join(self.audio_dir, "raw_segments")
+        self.user_audio_dir = os.path.join(self.project_dir, "assets", "audio")
         os.makedirs(self.raw_dir, exist_ok=True)
         self.tts = TTSEngine(voice=config.voice, rate=config.rate)
 
@@ -71,8 +72,24 @@ class AudioBuilder:
             raw_mp3 = os.path.join(self.raw_dir, f"{seg_id}_raw.mp3")
             trim_wav = os.path.join(self.raw_dir, f"{seg_id}_trim.wav")
 
-            await self.tts.synthesize(text, raw_mp3)
-            dur = SilenceTrimmer.trim_silence(raw_mp3, trim_wav)
+            # Check for user-provided real voiceover in assets/audio/
+            user_candidates = [
+                os.path.join(self.user_audio_dir, f"{seg_id}.wav"),
+                os.path.join(self.user_audio_dir, f"{seg_id}.mp3"),
+                os.path.join(self.user_audio_dir, f"{scene_id}_{idx + 1}.wav"),
+                os.path.join(self.user_audio_dir, f"{scene_id}_{idx + 1}.mp3"),
+                os.path.join(self.user_audio_dir, f"{seg_id}.m4a"),
+                os.path.join(self.user_audio_dir, f"{seg_id}.aac"),
+            ]
+            found_user_audio = next((p for p in user_candidates if os.path.isfile(p)), None)
+
+            if found_user_audio:
+                print(f"  ✓ [Voice Takeover] Found user audio for {seg_id} ({os.path.basename(found_user_audio)}). Skipping TTS.")
+                dur = SilenceTrimmer.trim_silence(found_user_audio, trim_wav)
+            else:
+                await self.tts.synthesize(text, raw_mp3)
+                dur = SilenceTrimmer.trim_silence(raw_mp3, trim_wav)
+
             if dur < 0.05:
                 raise RuntimeError(f"Trimmed audio for {seg_id} is too short ({dur:.3f}s).")
 

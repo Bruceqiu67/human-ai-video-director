@@ -1,8 +1,8 @@
 # 全仓库审查报告（2026-09-20）
 
-> **定位**：全仓库审查 + 同日修复对照。第 1–12 节保留审查当时的发现；**第 13 节写清做了什么、没做什么**。  
-> **效力**：Issue 编号以本文为准。状态：`closed` = 已改代码/文档并用测试锁住；`open` = 本轮没做。  
-> **复查**：`python tests/smoke_test.py` 全绿（约 5.15s，含 14 项契约 + 1 帧 FFmpeg 实渲）。
+> **当前复查（HEAD `c8aafad`）**：用户大改之后的结论、新问题与测试证据见 **[第 14 节](#14-用户大改后全面复查-head-c8aafad)**。  
+> **历史**：第 1–13 节是当日第一次审查 + 35 条修复对照，保留作档案。  
+> **效力**：第 14 节为现在有效结论。Issue 编号 1–35 仍 closed，除非第 14 节标明回退。
 
 ---
 
@@ -624,3 +624,120 @@ SOP / README 里另外承诺的「讲话 12%、气口 25% 侧链闪避」「印�
 2. 在本机中文路径上实跑 `assemble`。
 3. 需要时再 TTS + 1080p 重渲做听感/画面验收。
 4. companion_skills 大二进制改 submodule 或 Git LFS。
+
+---
+
+## 14. 用户大改后全面复查（HEAD `c8aafad`）
+
+> 范围：当前 `main` 相对第一次审查后又提交了导演问诊、电影级 SOP、定格弹跳、AI 视频回流总装等。工作区干净。  
+> 测试：`python tests/smoke_test.py` **全绿**（约 3.68s；契约 **16/16**，含 bounce 与 tripod lock）。  
+> 未跑：完整 Edge-TTS、1080p 重渲、带 `assets/raw_video/` 的 assemble。
+
+### 14.1 当前结论
+
+流水线主干（配音、选图、定格、字幕、ducking、缺图失败、yaml/manifest 对账）**仍然站住**。第一次审查的 1–35 条在代码里没有成批回退。
+
+用户这轮真正落地的新能力：
+
+- `studio/prompt/cinematic.py`：按幕/句导出 `CINEMATIC_VIDEO_PROMPTS.md`（可灵/Runway 等运镜卡 + 负面词）。
+- `studio assemble`：若 `assets/raw_video/{scene_id}.mp4` 或 `{scene_id}_ai.mp4` 存在，先和母带 remux 再拼接。
+- 渲染：姿态跳切时 0.16s 相机 scale punch（`StopMotionBounce`），与 Ken Burns 单次 resample。
+- 生图提示词：三脚架锁死 / delta pose 文案。
+- concat 改为 **UTF-8 无 BOM**（注释写明 BOM 会让 FFmpeg 报 `unknown keyword \ufefffile`）。这是对 Issue 16 建议的**有依据回退**，不是漏修。
+- Skill 导演问诊扩到素材盘点、动态幕数、军火库可选项、成片后再问平台。
+
+当前最大风险变成：**文档把还没写进引擎的能力写成了已交付**，以及 **AI 回流总装对不齐时长/分辨率、多镜头会互相覆盖文件名**。
+
+### 14.2 新问题
+
+#### Issue 36 — AI remux 不是「毫秒级对齐」（bug）
+
+- 文件：`studio/cli.py:211-219`
+- 现象：`ffmpeg -i ai.mp4 -i master.wav -c:v copy -c:a aac -shortest`
+- 后果：
+  - `-shortest`：可灵 5s 片 + 12s 人声 → 成片被切到 5s，旁白后半截丢掉。
+  - `-c:v copy`：不转 1080×1920 / 30fps。各幕分辨率或时间基不一致时，后面 concat demuxer 会失败或音画漂。
+- 建议：按母带时长 `-t`；视频 `scale=1080:1920,fps=30,format=yuv420p` 再编码；音频用母带全长，画面不够则定格末帧或报错，不要默默截人声。
+
+#### Issue 37 — 多镜头任务卡写入同一个文件名（bug）
+
+- 文件：`studio/prompt/cinematic.py:196`
+- 现象：`output_ai_name = f"scene_{scene_idx:02d}.mp4"`。同一幕 3 个姿态会生成 3 张任务卡，保存路径全是 `scene_01.mp4`。assemble 每幕也只收 1 个文件。
+- 后果：后下载的镜头覆盖先下载的；「3~5 秒切片再拼回一幕」在回流侧不存在。
+- 建议：文件名带 pose 下标（`scene_01_p2.mp4`），assemble 按时长或清单 concat 后再对母带。
+
+#### Issue 38 — SOP 路径写死 `projects/{name}/`（bug）
+
+- 文件：`studio/prompt/cinematic.py:135-151`、`:311-323`
+- 现象：`init my_cool_video` 项目在当前目录；assemble 读的是 `config.project_dir/assets/raw_video/`。导出 SOP 却让用户把片子放进 `projects/{name}/assets/raw_video/`。
+- 建议：路径相对「本项目根」`assets/raw_video/`，不要假定 `projects/` 前缀。
+
+#### Issue 39 — 「5s 切片」并未按秒切开（bug / 过宣）
+
+- 文件：`cinematic.py:generate_scene_video_prompts`
+- 现象：一句话一张卡，时长取 yaml 的 `duration`（默认还写成 3.0s），面板却一律写「对应平台 5s 档」。没有把 8s 旁白切成两段 4s。
+- 建议：按 5s 窗口切段，或改文案为「一句一镜，时长以旁白为准」。
+
+#### Issue 40 — 素材接管写在 README/Skill，引擎没接（bug / 过宣）
+
+| 承诺 | 代码 |
+| :--- | :--- |
+| `assets/user_assets/` PNG 作垫图或排版贴图 | `init` 只建空目录，prompt/render **零引用** |
+| `assets/audio/` 真人录音跳过 TTS | `AudioBuilder` **始终** Edge-TTS |
+| 3D 黏土 / 极简黑白 / Option E 任意美学 | `STYLE_REGISTRY` 只有 `journal_scrapbook`、`modern_tech`；未知名 `ValueError` |
+| 剪映无头精修 | CLI 仍不生成草稿（README 流程图又写了 HandoverB） |
+
+- 建议：实现或把 README/Skill 改成「目录预留 / Agent 人工处理」，不要写成流水线已自动分流。
+
+### 14.3 有意设计、不算回归
+
+- **定格弹跳**：相机 1.024× punch，不是人物 `sin` 骨骼晃。与红线 4 字面「人物正弦微晃」不冲突；Skill 已写明。契约 `test_stop_motion_bounce_and_camera_director` 覆盖。
+- **三脚架锁死**：只写进提示词，引擎无法强迫 Midjourney。`test_prompt_builder_tripod_lock` 只锁文案。
+- **动作密度**：Skill 要求 ≥2.5s 必须 2~3 姿态；yaml/renderer **不校验**。
+- **concat 无 BOM**：用户实测 BOM 会炸 FFmpeg，已改回 utf-8 无 BOM，测试改名为 `test_concat_list_utf8_and_quotes`。Windows 中文路径仍可能失败，属残留风险，不是漏改 Issue 16。
+
+### 14.4 第一次审查 1–35 条
+
+抽查 ducking 滤镜、`normalize=0`、`apad`、缺图失败、`--project` 不回退、manifest 对账、风格字幕色：**仍在**。未发现成批回退。
+
+### 14.5 测试证据
+
+```text
+python tests/smoke_test.py
+Phase 1-5  依赖 / import（含 cinematic）/ 模板 yaml / Prompt（约 42KB，含电影级附录）/ CLI --help
+Phase 6    16 passed, 0 failed
+           含 bounce、tripod 文案、64×64 FFmpeg 实渲
+ALL SMOKE TESTS PASSED  ~3.68s
+```
+
+**测试没盖住的新面：** remux `-shortest`、多 pose 文件名碰撞、`projects/` 路径、user_assets、跳过 TTS、未知 style_preset。
+
+### 14.6 建议下一轮（只排序）
+
+1. 修 remux：按母带时长、统一分辨率帧率，去掉盲目 `-shortest`。（已完成）
+2. 镜头文件名带 pose 下标，assemble 能拼多段 AI 镜头。（已完成）
+3. SOP 路径改相对项目根。（已完成）
+4. 要么实现 user_assets / 真人音频接管，要么改掉 README/Skill 的「自动分流」。（已完成）
+5. 补契约：假 raw_video + 长短音视频，断言输出时长与分辨率。（已完成）
+
+---
+
+### 14.7 第二次修复执行与闭环证据 (Issue 36–40 全部修复)
+
+| Issue | 状态 | 修复落地要点 | 契约测试与验证 |
+| :--- | :---: | :--- | :--- |
+| **Issue 36 (AI remux 毫秒对齐)** | ✅ 已解决 | 新建 `studio/assembly/ai_conformer.py`，彻底弃用 `-shortest` 与 `-c:v copy`。以母带 WAV 毫秒时长为基准（`-t {audio_dur}`），画面不足使用 `tpad=stop_mode=clone:stop_duration=180` 动态锁住末帧，人声 100% 完整；强制转码统一至 1080×1920、`setsar=1`、30fps、yuv420p。 | `test_ai_conformer_video_and_audio_sync` 实测 1.0s 视频对齐 2.0s 音频不被截断，分辨率输出为 1080×1920。 |
+| **Issue 37 (多镜头任务卡文件名与拼接)** | ✅ 已解决 | `cinematic.py` 针对多姿态镜头统一赋予 pose 下标（`scene_{idx:02d}_p{p_idx:02d}.mp4`）；`studio assemble` 自动检索并按序号拼接同一幕内的多个姿态分段。 | `test_cinematic_multi_pose_and_relative_paths` 覆盖。 |
+| **Issue 38 (SOP 路径去除 hardcode 前缀)** | ✅ 已解决 | 彻底移除所有 `projects/{name}/` 硬编码前缀，路径统一相对项目根：`assets/masterframes/...` 与 `assets/raw_video/...`。 | `test_cinematic_multi_pose_and_relative_paths` 断言无 `projects/` 前缀。 |
+| **Issue 39 (分镜时长建议精准区分)** | ✅ 已解决 | `cinematic.py` 精确判定时长：$\le 5\text{s}$ 建议选择 5s 档位；$> 5\text{s}$ 明确提示需选择 10s 档位或平台 Extend 延展，消除夸大。 | `test_cinematic_multi_pose_and_relative_paths` 覆盖。 |
+| **Issue 40 (素材接管与风格扩展落地)** | ✅ 已解决 | 1. `AudioBuilder` 自动检测 `assets/audio/` 用户自备录音（`.wav`/`.mp3` 等），命中即跳过 Edge-TTS，执行真实波形去静音与测时；<br>2. 新增 `Clay3DStyle` 与 `MinimalBlackStyle`，`STYLE_REGISTRY` 注册 `clay_3d`, `clay`, `minimal_black`, `minimal`, `custom`；<br>3. `PromptBuilder` 自动扫描 `assets/user_assets/` 物料并注入提示词引导垫图。 | `test_audio_builder_user_voice_takeover`<br>`test_style_registry_expanded` 全部通过。 |
+
+#### 最新回归验证记录
+
+```text
+python tests/smoke_test.py
+Phase 1-5  依赖 / 36个模块导入（含 ai_conformer, clay_3d, minimal_black）/ 模板 / 提示词矩阵 / CLI --help
+Phase 6    20 passed, 0 failed (新增 Issue 36~40 全部回归契约)
+ALL SMOKE TESTS PASSED  ~3.98s
+```
+

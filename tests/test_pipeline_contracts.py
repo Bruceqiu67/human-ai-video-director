@@ -358,6 +358,153 @@ def test_prompt_builder_tripod_lock() -> None:
     assert "DELTA POSE" in md or "微动姿态" in md
 
 
+def test_cinematic_multi_pose_and_relative_paths() -> None:
+    from studio.prompt.cinematic import CinematicPromptEngine
+
+    segments = [
+        {"text": "第一句话", "pose": "正面微笑", "duration": 3.0},
+        {"text": "第二句话很长超出了五秒钟的平台时间限制", "pose": "抬手讲解", "duration": 8.0},
+    ]
+    prompts = CinematicPromptEngine.generate_scene_video_prompts(
+        scene_idx=1,
+        stage_tag="STAGE 01",
+        headline="测试多姿态",
+        segments=segments,
+        total_scenes=1,
+        character_prompt="测试人物",
+    )
+    assert len(prompts) == 2
+    # Issue 37: Multi-pose clips must have pose index to avoid overwriting
+    assert prompts[0]["output_ai_name"] == "scene_01_p01.mp4"
+    assert prompts[1]["output_ai_name"] == "scene_01_p02.mp4"
+
+    # Issue 38: Relative paths without hardcoded projects/ prefix
+    assert prompts[0]["first_frame_path"] == "assets/masterframes/Scene01_pose_1.jpg"
+    assert prompts[0]["end_frame_path"] == "assets/anchors/scene_01_end.png"
+    assert "projects/" not in prompts[0]["first_frame_path"]
+
+    # Issue 39: Duration descriptions in SOP
+    class DummyConfig:
+        name = "test_proj"
+        title = "测试项目"
+        character_prompt = "测试人物"
+        scenes = [{
+            "id": "scene_01",
+            "stage_tag": "STAGE 01",
+            "headline": "测试",
+            "dialogue_segments": segments,
+        }]
+
+    sop_md = CinematicPromptEngine.generate_full_sop_markdown(DummyConfig())
+    assert "建议平台选择 5s 档位" in sop_md
+    assert "单句时长超 5s，平台需选择 10s 档位或使用 Extend 功能延展" in sop_md
+    assert "projects/test_proj/assets/raw_video" not in sop_md
+
+
+def test_style_registry_expanded() -> None:
+    from studio.styles import STYLE_REGISTRY, get_style
+
+    for style_name in ["clay_3d", "clay", "minimal_black", "minimal", "custom"]:
+        profile = get_style(style_name)
+        assert profile is not None
+        assert profile.name in ("clay_3d", "minimal_black", "journal_scrapbook")
+        assert len(profile.prompt_background_lines()) > 0
+
+
+def test_audio_builder_user_voice_takeover() -> None:
+    import asyncio
+    import math
+    import struct
+    import wave
+    from studio.audio.audio_builder import AudioBuilder
+    from studio.core.config import StoryboardConfig
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        user_audio_dir = os.path.join(tmp_dir, "assets", "audio")
+        os.makedirs(user_audio_dir, exist_ok=True)
+        # Create a dummy user wav of 1.0 second (44100Hz, mono sine)
+        user_wav_path = os.path.join(user_audio_dir, "scene_01_1.wav")
+        with wave.open(user_wav_path, "wb") as wf:
+            wf.setnchannels(1)
+            wf.setsampwidth(2)
+            wf.setframerate(44100)
+            data = bytearray()
+            for i in range(44100):
+                val = int(3000 * math.sin(2 * math.pi * 440 * i / 44100))
+                data.extend(struct.pack("<h", val))
+            wf.writeframes(data)
+
+        cfg_dict = {
+            "project": {"name": "test_audio", "title": "Test", "voice": "zh-CN-YunxiNeural", "rate": "+20%"},
+            "scenes": [{
+                "id": "scene_01",
+                "stage_tag": "STAGE 01",
+                "headline": "测试真人音频接管",
+                "dialogue_segments": [{"id": "scene_01_1", "text": "这段文字不应该走TTS，因为有真人音频"}],
+            }]
+        }
+        cfg = StoryboardConfig(cfg_dict, tmp_dir)
+        builder = AudioBuilder(cfg)
+
+        async def fail_tts(*args, **kwargs):
+            raise AssertionError("TTS synthesize should NOT be called when user audio is present!")
+        builder.tts.synthesize = fail_tts
+
+        master_wav, segs, total_dur = asyncio.run(builder.build_scene_audio(cfg.scenes[0]))
+        assert os.path.isfile(master_wav)
+        assert len(segs) == 1
+        assert segs[0]["duration"] > 0.5
+
+
+def test_ai_conformer_video_and_audio_sync() -> None:
+    from studio.assembly.ai_conformer import AIConformer
+    from studio.audio.silence_trimmer import SilenceTrimmer
+    from studio.core.proc import run_command
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        # Create 1.0s video (320x240)
+        short_video = os.path.join(tmp_dir, "short_ai.mp4")
+        run_command([
+            "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
+            "-f", "lavfi", "-i", "color=c=blue:s=320x240:d=1.0:r=24",
+            "-c:v", "libx264", "-pix_fmt", "yuv420p",
+            short_video,
+        ])
+        # Create 2.0s audio
+        long_audio = os.path.join(tmp_dir, "master.wav")
+        run_command([
+            "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
+            "-f", "lavfi", "-i", "sine=frequency=440:duration=2.0",
+            "-c:a", "pcm_s16le",
+            long_audio,
+        ])
+
+        output_mp4 = os.path.join(tmp_dir, "conformed.mp4")
+        AIConformer.conform_and_remux(
+            video_clips=[short_video],
+            output_path=output_mp4,
+            master_audio=long_audio,
+            width=1080,
+            height=1920,
+            fps=30,
+        )
+
+        assert os.path.isfile(output_mp4)
+        out_dur = SilenceTrimmer.get_duration(output_mp4)
+        # Verify video was NOT cut to 1.0s; it must match the 2.0s audio
+        assert abs(out_dur - 2.0) < 0.2
+
+        # Verify resolution
+        res = run_command([
+            "ffprobe", "-v", "error",
+            "-select_streams", "v:0",
+            "-show_entries", "stream=width,height",
+            "-of", "csv=p=0",
+            output_mp4,
+        ])
+        assert "1080,1920" in res.stdout
+
+
 def all_tests() -> list:
     return [
         test_pose_matching_scene_numbers,
@@ -376,6 +523,10 @@ def all_tests() -> list:
         test_one_frame_render_if_ffmpeg,
         test_stop_motion_bounce_and_camera_director,
         test_prompt_builder_tripod_lock,
+        test_cinematic_multi_pose_and_relative_paths,
+        test_style_registry_expanded,
+        test_audio_builder_user_voice_takeover,
+        test_ai_conformer_video_and_audio_sync,
     ]
 
 

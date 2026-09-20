@@ -1,10 +1,17 @@
 from studio.styles.base import StyleProfile
+from studio.styles.clay_3d import Clay3DStyle
 from studio.styles.journal_scrapbook import JournalScrapbookStyle
+from studio.styles.minimal_black import MinimalBlackStyle
 from studio.styles.modern_tech import ModernTechStyle
 
 STYLE_REGISTRY = {
     "journal_scrapbook": JournalScrapbookStyle,
     "modern_tech": ModernTechStyle,
+    "clay_3d": Clay3DStyle,
+    "clay": Clay3DStyle,
+    "minimal_black": MinimalBlackStyle,
+    "minimal": MinimalBlackStyle,
+    "custom": JournalScrapbookStyle,
 }
 
 
